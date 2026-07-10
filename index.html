@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <!-- 竖屏自适应：Kindle / 手机全宽；1024px+ 横屏/桌面左右布局，最大 1920px -->
+  <title>The Idle Kindle — Calendar</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
+  <link rel="apple-touch-icon" href="assets/icon.svg" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: '#000000',
+            paper: '#FFFFFF',
+            mute: '#888888',
+          },
+          fontFamily: {
+            sans: ['Helvetica Neue', 'Helvetica', 'Arial', 'PingFang SC', 'Microsoft YaHei', 'sans-serif'],
+            mono: ['Courier New', 'Courier', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --app-padding-x: 20px;
+      --web-layout-gap: 28px;
+      --web-hero-ratio: 60%;
+      --app-content-max: 100%;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #FFFFFF;
+      color: #000000;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    /* 全屏自适应：铺满视口，不居中、不限制固定宽度 */
+    .app-shell {
+      width: 100%;
+      min-height: 100%;
+      min-height: 100vh;
+      background: #FFFFFF;
+      position: relative;
+    }
+
+    /* Web 桌面端：封面图模糊背景（默认隐藏，不影响 Kindle / 手机） */
+    .app-shell-bg {
+      display: none;
+    }
+
+    .app-frame {
+      width: 100%;
+      max-width: none;
+      min-height: 100%;
+      min-height: 100vh;
+      height: 100vh;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      background: #FFFFFF;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Web / 平板横屏 / 桌面：1024px 起左右布局，最大适配 1920px */
+    @media (min-width: 1024px) and (min-height: 600px) {
+      :root {
+        --app-padding-x: clamp(24px, 2.2vw, 40px);
+        --web-layout-gap: clamp(28px, 2.8vw, 48px);
+        --app-content-max: min(1920px, 100%);
+      }
+
+      .app-shell {
+        padding: 0 clamp(12px, 1.2vw, 24px);
+      }
+
+      .app-shell-bg {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        -webkit-filter: blur(50px) grayscale(100%);
+        filter: blur(50px) grayscale(100%);
+        -webkit-transform: scale(1.08);
+        transform: scale(1.08);
+        pointer-events: none;
+      }
+
+      .app-frame {
+        width: 100%;
+        max-width: var(--app-content-max);
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* 日历页：左图右历，顶部对齐 */
+      #view-calendar.view-main {
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+        -webkit-box-align: start;
+        -webkit-align-items: flex-start;
+        align-items: flex-start;
+        gap: var(--web-layout-gap);
+        padding-top: clamp(32px, 4vh, 52px);
+      }
+
+      #view-calendar .hero-area {
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 var(--web-hero-ratio);
+        flex: 0 0 var(--web-hero-ratio);
+        width: var(--web-hero-ratio);
+        max-width: var(--web-hero-ratio);
+        max-height: none;
+        min-height: 0;
+        -webkit-align-self: stretch;
+        align-self: stretch;
+      }
+
+      #view-calendar .cal-panel {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 1 0%;
+        flex: 1 1 0%;
+        min-width: 0;
+      }
+
+      #view-calendar .meta-row {
+        margin-top: 0;
+        margin-bottom: clamp(16px, 2vh, 28px);
+      }
+
+      #view-calendar .cal-area {
+        margin-bottom: clamp(8px, 1.5vh, 16px);
+      }
+
+      #view-calendar .cal-panel {
+        -webkit-align-self: stretch;
+        align-self: stretch;
+      }
+
+      /* Footer 与上方左图右历同宽对齐 */
+      .footer-inner {
+        gap: var(--web-layout-gap);
+        -webkit-box-pack: start;
+        -webkit-justify-content: flex-start;
+        justify-content: flex-start;
+      }
+
+      .footer-workers {
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 var(--web-hero-ratio);
+        flex: 0 0 var(--web-hero-ratio);
+        width: var(--web-hero-ratio);
+        max-width: var(--web-hero-ratio);
+      }
+
+      .footer-clock {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 1 0%;
+        flex: 1 1 0%;
+        min-width: 0;
+      }
+    }
+
+    /* iPad Pro 横屏 / 小桌面 */
+    @media (min-width: 1194px) and (min-height: 600px) {
+      .cal-cell {
+        font-size: 17px;
+      }
+
+      .weekday {
+        font-size: 16px;
+      }
+    }
+
+    /* MacBook Pro / 中等桌面 */
+    @media (min-width: 1440px) and (min-height: 800px) {
+      :root {
+        --app-padding-x: clamp(32px, 2.5vw, 56px);
+        --web-layout-gap: clamp(36px, 3vw, 56px);
+      }
+
+      .cal-cell {
+        font-size: 18px;
+      }
+
+      #view-calendar .meta-row {
+        margin-bottom: 28px;
+      }
+    }
+
+    /* 大屏 / 1920 全高清 */
+    @media (min-width: 1680px) and (min-height: 900px) {
+      :root {
+        --web-layout-gap: 56px;
+        --app-padding-x: clamp(40px, 2.8vw, 64px);
+      }
+
+      .cal-cell {
+        font-size: 19px;
+      }
+
+      .weekday {
+        font-size: 17px;
+      }
+
+      .page-nav-wrap,
+      .app-footer {
+        padding-left: var(--app-padding-x);
+        padding-right: var(--app-padding-x);
+      }
+    }
+
+    @media (min-width: 1920px) {
+      .app-shell {
+        padding: 0;
+      }
+    }
+
+    .view-main {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 0%;
+      flex: 1 1 0%;
+      min-height: 0;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-align: stretch;
+      -webkit-align-items: stretch;
+      align-items: stretch;
+      padding: 16px var(--app-padding-x) 0;
+      overflow: hidden;
+    }
+
+    .view-main.is-hidden {
+      display: none;
+    }
+
+    .cal-panel {
+      width: 100%;
+      min-height: 0;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 0%;
+      flex: 1 1 0%;
+    }
+
+    .hero-area {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 0%;
+      flex: 1 1 0%;
+      width: 100%;
+      min-height: 96px;
+      max-height: 38%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 绝对定位填满容器，避免 Tailwind preflight 的 img { height: auto } 导致留白 */
+    .hero-area .hero-img {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      max-width: none;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      -webkit-filter: grayscale(100%);
+      filter: grayscale(100%) contrast(1.05);
+    }
+
+    .meta-row {
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
+      width: 100%;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: start;
+      -webkit-align-items: flex-start;
+      align-items: flex-start;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      justify-content: space-between;
+      margin-top: 20px;
+      margin-bottom: 24px;
+      padding: 0;
+      gap: 16px;
+    }
+
+    .meta-row #ym-label {
+      margin: 0;
+      padding: 0;
+      text-align: right;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+
+    .meta-place {
+      margin: 0;
+      padding: 0;
+      text-align: left;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 auto;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .cal-area {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1.15 1 0%;
+      flex: 1.15 1 0%;
+      width: 100%;
+      min-height: 0;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      margin-bottom: 16px;
+      padding: 0;
+    }
+
+    .cal-grid {
+      width: 100%;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-wrap: wrap;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+
+    .cal-grid > * {
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 0 14.2857142857%;
+      flex: 0 0 14.2857142857%;
+      width: 14.2857142857%;
+      max-width: 14.2857142857%;
+      box-sizing: border-box;
+      text-align: center;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+    }
+
+    @supports (display: grid) {
+      .cal-grid {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        -webkit-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+      }
+
+      .cal-grid > * {
+        width: auto;
+        max-width: none;
+        -webkit-flex: initial;
+        flex: initial;
+      }
+    }
+
+    .cal-weekdays {
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
+    }
+
+    .cal-days {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 0%;
+      flex: 1 1 0%;
+      min-height: 0;
+      -webkit-align-content: stretch;
+      align-content: stretch;
+    }
+
+    @supports (display: grid) {
+      .cal-days {
+        grid-template-rows: repeat(6, 1fr);
+      }
+    }
+
+    .cal-cell {
+      font-size: 16px;
+      color: #555555;
+      position: relative;
+      min-height: 0;
+      font-variant-numeric: tabular-nums;
+      -webkit-font-feature-settings: "tnum";
+      font-feature-settings: "tnum";
+      font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    }
+
+    @supports not (display: grid) {
+      .cal-days > .cal-cell {
+        height: 16.666667%;
+      }
+    }
+
+    .cal-cell.is-today {
+      color: #000000;
+      font-weight: 600;
+    }
+
+    .cal-cell.is-today::after {
+      content: '';
+      position: absolute;
+      top: 12%;
+      right: 22%;
+      bottom: 12%;
+      left: 22%;
+      border: 2px solid #000000;
+      pointer-events: none;
+    }
+
+    .weekday {
+      font-size: 15px;
+      color: #999999;
+      padding: 6px 0 8px;
+      font-weight: 500;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    #place-name,
+    #place-coords,
+    .btn-plain {
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .page-nav-wrap {
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 0 44px;
+      flex: 0 0 44px;
+      height: 44px;
+      padding: 0 var(--app-padding-x);
+    }
+
+    .page-nav {
+      position: relative;
+      width: 100%;
+      height: 44px;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      cursor: pointer;
+      -ms-touch-action: manipulation;
+      touch-action: manipulation;
+    }
+
+    .page-nav-track {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #000000;
+      pointer-events: none;
+    }
+
+    .page-nav-thumb {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 33.333%;
+      height: 6px;
+      background: #000000;
+      margin-top: -3px;
+      pointer-events: none;
+    }
+
+    .page-nav-zones {
+      position: relative;
+      z-index: 1;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    .page-nav-zone {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 0%;
+      flex: 1 1 0%;
+      background: transparent;
+      border: none;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      font-family: inherit;
+      height: 100%;
+      min-height: 44px;
+    }
+
+    .page-nav-zone:focus {
+      outline: 2px solid #000000;
+      outline-offset: -2px;
+    }
+
+    .app-footer {
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 0 72px;
+      flex: 0 0 72px;
+      height: 72px;
+      padding: 0 var(--app-padding-x);
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+    }
+
+    .footer-inner {
+      width: 100%;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      justify-content: space-between;
+      min-width: 0;
+    }
+
+    .footer-workers {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 auto;
+      flex: 1 1 auto;
+      overflow: hidden;
+    }
+
+    .footer-workers-content {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 auto;
+      flex: 1 1 auto;
+      overflow: hidden;
+    }
+
+    .workers-count-wrap {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-flex-shrink: 0;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .workers-icons-row {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 auto;
+      flex: 1 1 auto;
+      overflow: hidden;
+    }
+
+    .workers-ellipsis {
+      -webkit-flex-shrink: 0;
+      flex-shrink: 0;
+    }
+
+    .workers-placeholder.is-hidden,
+    .workers-count-wrap.is-hidden,
+    .workers-ellipsis.is-hidden {
+      display: none;
+    }
+
+    .footer-clock {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: end;
+      -webkit-justify-content: flex-end;
+      justify-content: flex-end;
+      min-width: 0;
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 1 auto;
+      flex: 0 1 auto;
+    }
+
+    .footer-label,
+    .footer-text,
+    #btn-work-clock {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      line-height: 1rem;
+      color: #888888;
+    }
+
+    .footer-label {
+      -webkit-flex-shrink: 0;
+      flex-shrink: 0;
+    }
+
+    .btn-plain {
+      min-height: 50px;
+      padding: 12px;
+      font-size: 13px;
+      color: #000000;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    #btn-work-clock {
+      min-height: 50px;
+      padding: 12px 0;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      -webkit-flex-shrink: 0;
+      flex-shrink: 0;
+    }
+
+    #btn-work-clock:focus {
+      outline: 2px solid #000000;
+      outline-offset: -2px;
+    }
+
+    .btn-plain:focus {
+      outline: 2px solid #000000;
+      outline-offset: -2px;
+    }
+
+    .work-clock {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+      -webkit-box-pack: end;
+      -webkit-justify-content: flex-end;
+      justify-content: flex-end;
+    }
+
+    .work-clock-label,
+    .work-clock-sep {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .work-clock-sep {
+      display: none;
+      -webkit-flex-shrink: 0;
+      flex-shrink: 0;
+    }
+
+    .work-clock-sep.is-visible {
+      display: inline;
+    }
+
+    .worker-icon {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      display: block;
+      -webkit-flex-shrink: 0;
+      flex-shrink: 0;
+    }
+
+    #today-workers {
+      gap: 6px;
+    }
+
+    #today-workers.workers-icons-row {
+      gap: 6px;
+    }
+
+    @media (max-width: 699px) {
+      .cal-cell {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div
+      class="app-shell-bg"
+      id="web-bg"
+      aria-hidden="true"
+      style="background-image: url('assets/covers/cover-forest.png');"
+    ></div>
+    <div class="app-frame">
+      <!-- 主内容：电子日历 -->
+      <main id="view-calendar" class="view-main">
+        <!-- 6. 插画：随高度伸缩，cover 居中 -->
+        <div class="hero-area">
+          <img
+            class="hero-img"
+            src="assets/covers/cover-forest.png"
+            alt="Cover"
+            width="647"
+            height="310"
+          />
+        </div>
+
+        <div class="cal-panel">
+        <!-- 5. 地点（左）+ 年月（右） -->
+        <div class="meta-row">
+          <div class="meta-place leading-snug">
+            <div id="place-name" class="text-[clamp(0.7rem,2.6vw,0.8rem)] text-ink">—</div>
+            <div id="place-coords" class="text-[clamp(0.7rem,2.6vw,0.8rem)] text-mute mt-0.5">—</div>
+          </div>
+          <h1 id="ym-label" class="text-[clamp(1.75rem,7vw,2.25rem)] leading-none">
+            ——/——
+          </h1>
+        </div>
+
+        <!-- 4. 月历：适应剩余宽高；3. 与滑块固定间距 -->
+        <div class="cal-area">
+          <div class="cal-grid cal-weekdays" aria-hidden="true">
+            <div class="weekday">Sun</div>
+            <div class="weekday">Mon</div>
+            <div class="weekday">Tue</div>
+            <div class="weekday">Wed</div>
+            <div class="weekday">Thu</div>
+            <div class="weekday">Fri</div>
+            <div class="weekday">Sat</div>
+          </div>
+          <div id="cal-days" class="cal-grid cal-days" role="grid" aria-label="月历"></div>
+        </div>
+        </div>
+      </main>
+
+      <!-- 占位：其他页（后续实现） -->
+      <main id="view-clock" class="view-main is-hidden" style="align-items: center; justify-content: center;">
+        <p class="text-mute text-sm">时钟页 · 即将上线</p>
+      </main>
+      <main id="view-pomo" class="view-main is-hidden" style="align-items: center; justify-content: center;">
+        <p class="text-mute text-sm">番茄钟 · 即将上线</p>
+      </main>
+
+      <!-- 2. 三段滑块：固定高度，紧贴 footer -->
+      <nav class="page-nav-wrap" aria-label="页面切换">
+        <div class="page-nav" id="page-nav" role="tablist">
+          <div class="page-nav-track" aria-hidden="true"></div>
+          <div class="page-nav-thumb" id="page-nav-thumb" aria-hidden="true"></div>
+          <div class="page-nav-zones">
+            <button type="button" class="page-nav-zone" data-page="calendar" role="tab" aria-selected="true" aria-label="日历"></button>
+            <button type="button" class="page-nav-zone" data-page="clock" role="tab" aria-selected="false" aria-label="时钟"></button>
+            <button type="button" class="page-nav-zone" data-page="pomo" role="tab" aria-selected="false" aria-label="番茄钟"></button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- 1. Footer：固定 72px -->
+      <footer class="app-footer">
+        <div class="footer-inner">
+          <div class="footer-workers">
+            <span class="footer-label shrink-0">今日工位</span>
+            <div class="footer-workers-content">
+              <span id="workers-placeholder" class="footer-text workers-placeholder">—</span>
+              <span id="workers-count-wrap" class="workers-count-wrap is-hidden">
+                <span class="footer-text">｜</span><span id="workers-count" class="footer-text">+1</span>
+              </span>
+              <div id="today-workers" class="workers-icons-row" aria-live="polite"></div>
+              <span id="workers-ellipsis" class="footer-text workers-ellipsis is-hidden" aria-hidden="true">…</span>
+            </div>
+          </div>
+          <div class="footer-clock">
+            <div id="work-clock" class="work-clock">
+              <span id="work-clock-label" class="work-clock-label footer-text truncate" aria-live="polite"></span>
+              <span id="work-clock-sep" class="work-clock-sep footer-text" aria-hidden="true"></span>
+              <button
+                type="button"
+                id="btn-work-clock"
+                class="shrink-0"
+                aria-label="上班打卡"
+              >上班打卡</button>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      /** 封面目录与 CSV 配置（assets/covers/） */
+      var COVERS_BASE = 'assets/covers/';
+      var COVER_CSV_URL = COVERS_BASE + 'cover_copy.csv';
+      var FALLBACK_IMAGE_FILE = 'cover-forest.png';
+
+      var FALLBACK_SCENE = {
+        image: COVERS_BASE + FALLBACK_IMAGE_FILE,
+        name: '层叠山林藏着无尽松弛',
+        coords: '山野包容所有细碎情绪',
+        alt: '层叠山林藏着无尽松弛',
+      };
+
+      var activeScene = FALLBACK_SCENE;
+      var csvFallbackScene = FALLBACK_SCENE;
+      var coverCatalog = null;
+      var lastCoverDateKey = null;
+
+      function parseCSVLine(line) {
+        var result = [];
+        var current = '';
+        var inQuotes = false;
+        var i;
+
+        for (i = 0; i < line.length; i++) {
+          var ch = line[i];
+          if (ch === '"') {
+            inQuotes = !inQuotes;
+          } else if (ch === ',' && !inQuotes) {
+            result.push(current.trim());
+            current = '';
+          } else {
+            current += ch;
+          }
+        }
+        result.push(current.trim());
+        return result;
+      }
+
+      /** 解析 cover_copy.csv：Image name → 图片，Dscribe → 地点名，Location → 坐标文案 */
+      function parseCoverCSV(text) {
+        var lines = text.split(/\r?\n/).filter(function (line) {
+          return line.trim();
+        });
+        if (lines.length < 2) return [];
+
+        var headers = parseCSVLine(lines[0]);
+        var imageIdx = headers.indexOf('Image name');
+        var describeIdx = headers.indexOf('Dscribe');
+        if (describeIdx < 0) describeIdx = headers.indexOf('Describe');
+        var locationIdx = headers.indexOf('Location');
+
+        if (imageIdx < 0) return [];
+
+        var catalog = [];
+        var i;
+
+        for (i = 1; i < lines.length; i++) {
+          var cols = parseCSVLine(lines[i]);
+          var imageFile = cols[imageIdx];
+          if (!imageFile) continue;
+
+          catalog.push({
+            image: COVERS_BASE + imageFile,
+            imageFile: imageFile,
+            name: describeIdx >= 0 ? (cols[describeIdx] || '') : '',
+            coords: locationIdx >= 0 ? (cols[locationIdx] || '') : '',
+            alt: describeIdx >= 0 ? (cols[describeIdx] || 'Cover') : 'Cover',
+          });
+        }
+
+        return catalog;
+      }
+
+      function findFallbackScene(catalog) {
+        var i;
+        for (i = 0; i < catalog.length; i++) {
+          if (catalog[i].imageFile === FALLBACK_IMAGE_FILE) {
+            return catalog[i];
+          }
+        }
+        return FALLBACK_SCENE;
+      }
+
+      function verifyImageUrl(url) {
+        return new Promise(function (resolve) {
+          var probe = new Image();
+          probe.onload = function () { resolve(true); };
+          probe.onerror = function () { resolve(false); };
+          probe.src = url;
+        });
+      }
+
+      function pickRandomCover(catalog) {
+        return catalog[Math.floor(Math.random() * catalog.length)];
+      }
+
+      /** 从目录中随机解析一条封面（含图片可用性校验） */
+      function resolveRandomScene(catalog) {
+        var fallbackScene = findFallbackScene(catalog);
+        var picked = pickRandomCover(catalog);
+        return verifyImageUrl(picked.image).then(function (ok) {
+          csvFallbackScene = fallbackScene;
+          return ok ? picked : fallbackScene;
+        });
+      }
+
+      /** 拉取并缓存 CSV 封面目录 */
+      function loadCoverCatalog() {
+        if (coverCatalog && coverCatalog.length) {
+          return Promise.resolve(coverCatalog);
+        }
+
+        return fetch(COVER_CSV_URL)
+          .then(function (res) {
+            if (!res.ok) throw new Error('csv fetch failed');
+            return res.text();
+          })
+          .then(function (text) {
+            var catalog = parseCoverCSV(text);
+            if (!catalog.length) throw new Error('csv empty');
+            coverCatalog = catalog;
+            csvFallbackScene = findFallbackScene(catalog);
+            return catalog;
+          });
+      }
+
+      /** 随机换封面（刷新 / 跨天共用） */
+      function rotateCoverScene() {
+        if (!coverCatalog || !coverCatalog.length) {
+          activeScene = FALLBACK_SCENE;
+          applyScene(FALLBACK_SCENE);
+          return Promise.resolve(FALLBACK_SCENE);
+        }
+
+        return resolveRandomScene(coverCatalog).then(function (scene) {
+          activeScene = scene;
+          applyScene(scene);
+          return scene;
+        });
+      }
+
+      /** 首次加载：读 CSV + 随机选封面 */
+      function loadActiveScene() {
+        return loadCoverCatalog()
+          .then(function (catalog) {
+            return resolveRandomScene(catalog);
+          })
+          .then(function (scene) {
+            activeScene = scene;
+            lastCoverDateKey = dateKey(getAppDate());
+            return scene;
+          })
+          .catch(function () {
+            coverCatalog = null;
+            activeScene = FALLBACK_SCENE;
+            csvFallbackScene = FALLBACK_SCENE;
+            lastCoverDateKey = dateKey(getAppDate());
+            return FALLBACK_SCENE;
+          });
+      }
+
+      /** 每天 00:00 跨天后自动随机换封面与文案 */
+      function initCoverMidnightWatch() {
+        setInterval(function () {
+          var todayKey = dateKey(getAppDate());
+          if (!lastCoverDateKey || todayKey === lastCoverDateKey) return;
+
+          lastCoverDateKey = todayKey;
+          rotateCoverScene();
+          renderCalendar(getAppDate());
+          syncDailyWorkers(getAppDate());
+        }, 60000);
+      }
+
+      function applyScene(scene) {
+        document.getElementById('place-name').textContent = scene.name || '—';
+        document.getElementById('place-coords').textContent = scene.coords || '—';
+
+        var hero = document.querySelector('.hero-img');
+        if (hero.getAttribute('src') !== scene.image) {
+          hero.setAttribute('src', scene.image);
+        }
+        hero.setAttribute('alt', scene.alt || scene.name || 'Cover');
+
+        hero.onerror = function () {
+          if (activeScene.image !== csvFallbackScene.image) {
+            activeScene = csvFallbackScene;
+            applyScene(csvFallbackScene);
+          }
+        };
+
+        var webBg = document.getElementById('web-bg');
+        if (webBg) {
+          webBg.style.backgroundImage = 'url(' + scene.image + ')';
+        }
+      }
+
+      /** 今日工位占位图标（首次上班打卡随机解锁其一） */
+      var WORKER_ICONS = {
+        cheese: { src: 'assets/blind-box/worker-cheese.png', alt: '奶酪' },
+        crab: { src: 'assets/blind-box/worker-crab.png', alt: '螃蟹' },
+        salad: { src: 'assets/blind-box/worker-salad.png', alt: '沙拉' },
+      };
+
+      var STARTER_WORKERS = ['cheese', 'crab', 'salad'];
+
+      function pad2(n) {
+        return n < 10 ? '0' + n : String(n);
+      }
+
+      function daysInMonth(year, monthIndex) {
+        return new Date(year, monthIndex + 1, 0).getDate();
+      }
+
+      /** 浏览器本地时间 */
+      function getAppDate() {
+        return new Date();
+      }
+
+      function dateKey(date) {
+        return date.getFullYear() + '-' + pad2(date.getMonth() + 1) + '-' + pad2(date.getDate());
+      }
+
+      function renderCalendar(date) {
+        var year = date.getFullYear();
+        var month = date.getMonth();
+        var today = date.getDate();
+        var total = daysInMonth(year, month);
+        var firstDow = new Date(year, month, 1).getDay();
+
+        var scene = activeScene;
+
+        document.getElementById('ym-label').textContent = year + '/' + pad2(month + 1);
+        applyScene(scene);
+
+        var grid = document.getElementById('cal-days');
+        grid.innerHTML = '';
+
+        var i;
+        for (i = 0; i < firstDow; i++) {
+          var empty = document.createElement('div');
+          empty.className = 'cal-cell';
+          empty.setAttribute('aria-hidden', 'true');
+          grid.appendChild(empty);
+        }
+
+        for (i = 1; i <= total; i++) {
+          var cell = document.createElement('div');
+          cell.className = 'cal-cell' + (i === today ? ' is-today' : '');
+          cell.setAttribute('role', 'gridcell');
+          cell.textContent = String(i);
+          if (i === today) {
+            cell.setAttribute('aria-current', 'date');
+          }
+          grid.appendChild(cell);
+        }
+
+        var filled = firstDow + total;
+        for (i = filled; i < 42; i++) {
+          var pad = document.createElement('div');
+          pad.className = 'cal-cell';
+          pad.setAttribute('aria-hidden', 'true');
+          grid.appendChild(pad);
+        }
+      }
+
+      /** 消残影（墨水屏） */
+      function triggerScreenFlash() {
+        var flash = document.createElement('div');
+        flash.className = 'fixed inset-0 bg-black z-50';
+        document.body.appendChild(flash);
+        setTimeout(function () {
+          flash.className = 'fixed inset-0 bg-white z-50';
+        }, 300);
+        setTimeout(function () {
+          flash.remove();
+        }, 600);
+      }
+
+      /** localStorage：跨天清空今日工位 */
+      function getTodayWorkers() {
+        try {
+          return JSON.parse(localStorage.getItem('today_workers') || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveTodayWorkers(workers) {
+        localStorage.setItem('today_workers', JSON.stringify(workers));
+      }
+
+      function getUnlockedList() {
+        try {
+          return JSON.parse(localStorage.getItem('unlocked_list') || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveUnlockedList(list) {
+        localStorage.setItem('unlocked_list', JSON.stringify(list));
+      }
+
+      function updateWorkersOverflow() {
+        var row = document.getElementById('today-workers');
+        var ellipsis = document.getElementById('workers-ellipsis');
+        if (!row || !ellipsis) return;
+
+        if (!row.children.length) {
+          ellipsis.classList.add('is-hidden');
+          return;
+        }
+
+        if (row.scrollWidth > row.clientWidth) {
+          ellipsis.classList.remove('is-hidden');
+        } else {
+          ellipsis.classList.add('is-hidden');
+        }
+      }
+
+      function renderTodayWorkers(workers) {
+        var placeholder = document.getElementById('workers-placeholder');
+        var countWrap = document.getElementById('workers-count-wrap');
+        var countEl = document.getElementById('workers-count');
+        var el = document.getElementById('today-workers');
+        var ellipsis = document.getElementById('workers-ellipsis');
+
+        if (!workers.length) {
+          placeholder.classList.remove('is-hidden');
+          countWrap.classList.add('is-hidden');
+          el.innerHTML = '';
+          ellipsis.classList.add('is-hidden');
+          return;
+        }
+
+        placeholder.classList.add('is-hidden');
+        countWrap.classList.remove('is-hidden');
+        countEl.textContent = '+' + workers.length;
+
+        el.innerHTML = '';
+        workers.forEach(function (id) {
+          var icon = WORKER_ICONS[id];
+          if (!icon) return;
+          var img = document.createElement('img');
+          img.src = icon.src;
+          img.alt = icon.alt;
+          img.className = 'worker-icon';
+          img.width = 24;
+          img.height = 24;
+          img.onload = updateWorkersOverflow;
+          el.appendChild(img);
+        });
+
+        if (typeof requestAnimationFrame === 'function') {
+          requestAnimationFrame(updateWorkersOverflow);
+        } else {
+          setTimeout(updateWorkersOverflow, 0);
+        }
+      }
+
+      /** 首次上班打卡：今日工位为空时随机解锁一个占位图标 */
+      function grantStarterWorkerIfNeeded() {
+        var workers = getTodayWorkers();
+        if (workers.length) return workers;
+
+        var pick = STARTER_WORKERS[Math.floor(Math.random() * STARTER_WORKERS.length)];
+        workers.push(pick);
+        saveTodayWorkers(workers);
+
+        var unlocked = getUnlockedList();
+        if (unlocked.indexOf(pick) === -1) {
+          unlocked.push(pick);
+          saveUnlockedList(unlocked);
+        }
+
+        return workers;
+      }
+
+      function syncDailyWorkers(date) {
+        var todayKey = dateKey(date);
+
+        var storedDate = localStorage.getItem('workers_date');
+        if (storedDate !== todayKey) {
+          saveTodayWorkers([]);
+          localStorage.setItem('workers_date', todayKey);
+        }
+
+        if (!localStorage.getItem('unlocked_list')) {
+          saveUnlockedList([]);
+        }
+
+        renderTodayWorkers(getTodayWorkers());
+      }
+
+      /** 底部滑块切换：左=日历 / 中=时钟 / 右=番茄钟 */
+      var PAGES = ['calendar', 'clock', 'pomo'];
+
+      function switchPage(page) {
+        var index = PAGES.indexOf(page);
+        if (index < 0) return;
+
+        var views = {
+          calendar: document.getElementById('view-calendar'),
+          clock: document.getElementById('view-clock'),
+          pomo: document.getElementById('view-pomo'),
+        };
+
+        PAGES.forEach(function (key) {
+          views[key].classList.toggle('is-hidden', key !== page);
+        });
+
+        var thumb = document.getElementById('page-nav-thumb');
+        thumb.style.left = (index * 33.333) + '%';
+
+        var zones = document.querySelectorAll('.page-nav-zone');
+        zones.forEach(function (zone) {
+          var selected = zone.getAttribute('data-page') === page;
+          zone.setAttribute('aria-selected', selected ? 'true' : 'false');
+        });
+      }
+
+      function initPageNav() {
+        var zones = document.querySelectorAll('.page-nav-zone');
+        zones.forEach(function (zone) {
+          zone.addEventListener('click', function () {
+            switchPage(zone.getAttribute('data-page'));
+          });
+        });
+        switchPage('calendar');
+      }
+
+      var WORK_CLOCK_KEY = 'work_clock';
+
+      function defaultWorkClock() {
+        return { date: null, status: 'idle', elapsedMs: 0, sessionStart: null };
+      }
+
+      function loadWorkClock() {
+        try {
+          var raw = localStorage.getItem(WORK_CLOCK_KEY);
+          if (!raw) return defaultWorkClock();
+          return JSON.parse(raw);
+        } catch (e) {
+          return defaultWorkClock();
+        }
+      }
+
+      function saveWorkClock(state) {
+        localStorage.setItem(WORK_CLOCK_KEY, JSON.stringify(state));
+      }
+
+      function resetWorkClockIfNewDay(state, todayKey) {
+        if (state.date && state.date !== todayKey) {
+          return defaultWorkClock();
+        }
+        return state;
+      }
+
+      function getWorkElapsedMs(state) {
+        if (state.status === 'working' && state.sessionStart) {
+          return state.elapsedMs + (Date.now() - state.sessionStart);
+        }
+        return state.elapsedMs;
+      }
+
+      function formatWorkTime(ms) {
+        var totalSeconds = Math.floor(ms / 1000);
+        var hours = Math.floor(totalSeconds / 3600);
+        var minutes = Math.floor((totalSeconds % 3600) / 60);
+        var seconds = totalSeconds % 60;
+        return pad2(hours) + ':' + pad2(minutes) + ':' + pad2(seconds);
+      }
+
+      function renderWorkClock(state) {
+        var label = document.getElementById('work-clock-label');
+        var sep = document.getElementById('work-clock-sep');
+        var btn = document.getElementById('btn-work-clock');
+
+        if (state.status === 'idle') {
+          label.textContent = '';
+          sep.classList.remove('is-visible');
+          sep.textContent = '';
+          btn.textContent = '上班打卡';
+          btn.setAttribute('aria-label', '上班打卡');
+        } else if (state.status === 'working') {
+          label.textContent = '你已经上班 ' + formatWorkTime(getWorkElapsedMs(state));
+          sep.textContent = '｜';
+          sep.classList.add('is-visible');
+          btn.textContent = '下班打卡';
+          btn.setAttribute('aria-label', '下班打卡');
+        } else if (state.status === 'off') {
+          label.textContent = '下班啦～';
+          sep.textContent = '｜';
+          sep.classList.add('is-visible');
+          btn.textContent = '上班打卡';
+          btn.setAttribute('aria-label', '上班打卡');
+        }
+      }
+
+      function initWorkClock() {
+        var state = resetWorkClockIfNewDay(loadWorkClock(), dateKey(getAppDate()));
+        saveWorkClock(state);
+        renderWorkClock(state);
+
+        var btn = document.getElementById('btn-work-clock');
+        btn.addEventListener('click', function () {
+          var todayKey = dateKey(getAppDate());
+          state = resetWorkClockIfNewDay(state, todayKey);
+
+          if (state.status === 'idle') {
+            state.date = todayKey;
+            state.status = 'working';
+            state.elapsedMs = 0;
+            state.sessionStart = Date.now();
+            grantStarterWorkerIfNeeded();
+            syncDailyWorkers(getAppDate());
+          } else if (state.status === 'off') {
+            state.date = todayKey;
+            state.status = 'working';
+            state.sessionStart = Date.now();
+          } else if (state.status === 'working') {
+            state.elapsedMs = getWorkElapsedMs(state);
+            state.sessionStart = null;
+            state.status = 'off';
+          }
+
+          saveWorkClock(state);
+          renderWorkClock(state);
+        });
+
+        setInterval(function () {
+          var todayKey = dateKey(getAppDate());
+          var prevStatus = state.status;
+          state = resetWorkClockIfNewDay(state, todayKey);
+          if (prevStatus !== state.status || state.status === 'working') {
+            saveWorkClock(state);
+            renderWorkClock(state);
+          }
+        }, 1000);
+      }
+
+      function initApp() {
+        var today = getAppDate();
+
+        loadActiveScene().then(function () {
+          renderCalendar(today);
+          syncDailyWorkers(today);
+          initPageNav();
+          initWorkClock();
+          initCoverMidnightWatch();
+        });
+
+        window.addEventListener('resize', updateWorkersOverflow);
+      }
+
+      window.triggerScreenFlash = triggerScreenFlash;
+      window.getAppDate = getAppDate;
+
+      initApp();
+    })();
+  </script>
+</body>
+</html>

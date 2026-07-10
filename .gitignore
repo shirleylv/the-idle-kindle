@@ -1,0 +1,45 @@
+# ── 内部文档（不上传） ──
+doc/
+
+# ── 敏感信息与密钥 ──
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/
+*.credentials.json
+config.local.*
+
+# ── Cursor / IDE 本地配置 ──
+.cursor/
+.cursorrules
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── 操作系统生成文件 ──
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ── 日志与临时文件 ──
+*.log
+*.tmp
+*.temp
+.cache/
+
+# ── 依赖与构建产物（若后续引入） ──
+node_modules/
+dist/
+build/
+.parcel-cache/
+.vercel/
