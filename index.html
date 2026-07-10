@@ -62,10 +62,7 @@
       position: relative;
     }
 
-    /* Web 桌面端：封面图模糊背景（默认隐藏，不影响 Kindle / 手机） */
-    .app-shell-bg {
-      display: none;
-    }
+    /* Web 桌面端：纯白底，不再使用封面模糊背景 */
 
     .app-frame {
       width: 100%;
@@ -95,21 +92,7 @@
 
       .app-shell {
         padding: 0 clamp(12px, 1.2vw, 24px);
-      }
-
-      .app-shell-bg {
-        display: block;
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        -webkit-filter: blur(50px) grayscale(100%);
-        filter: blur(50px) grayscale(100%);
-        -webkit-transform: scale(1.08);
-        transform: scale(1.08);
-        pointer-events: none;
+        background: #FFFFFF;
       }
 
       .app-frame {
@@ -118,6 +101,7 @@
         margin: 0 auto;
         position: relative;
         z-index: 1;
+        background: #FFFFFF;
       }
 
       /* 日历页：左图右历，顶部对齐 */
@@ -766,16 +750,292 @@
         font-size: 15px;
       }
     }
+
+    /* —— Tab 2 墨水屏时钟 —— */
+    #view-clock.view-main {
+      position: relative;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      justify-content: space-between;
+      padding-top: clamp(12px, 2.5vh, 28px);
+      padding-bottom: 0;
+      overflow: hidden;
+    }
+
+    /* 全屏背景：cover 居中，50% 透明 */
+    .clock-bg {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 0;
+      background-image: url('assets/clock/bg-meadow.png');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      opacity: 0.2;
+      pointer-events: none;
+      -webkit-filter: grayscale(100%);
+      filter: grayscale(100%);
+    }
+
+    .clock-page {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      justify-content: space-between;
+    }
+
+    .clock-header {
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
+      width: 100%;
+      margin-top: 60px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: clamp(0.9rem, 3.2vw, 1.1rem);
+      line-height: 1.4;
+      color: #000000;
+      letter-spacing: 0.02em;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .clock-header-sep {
+      color: #888888;
+      margin: 0 0.35em;
+    }
+
+    .clock-weather-icon {
+      margin: 0 0.2em;
+    }
+
+    .clock-center {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 auto;
+      flex: 1 1 auto;
+      min-height: 0;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      text-align: center;
+      padding: clamp(8px, 2vh, 24px) 0;
+    }
+
+    .clock-time-row {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: end;
+      -webkit-align-items: flex-end;
+      align-items: flex-end;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      gap: clamp(6px, 1.5vw, 14px);
+      line-height: 1;
+    }
+
+    .clock-time {
+      margin: 0;
+      padding: 0;
+      font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      font-size: clamp(4.5rem, 18vw, 7.5rem);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      font-variant-numeric: tabular-nums;
+      -webkit-font-feature-settings: "tnum";
+      font-feature-settings: "tnum";
+      color: #000000;
+    }
+
+    .clock-ampm {
+      font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      font-size: clamp(0.85rem, 2.8vw, 1.15rem);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      padding-bottom: clamp(0.55rem, 2.2vw, 1.1rem);
+      color: #000000;
+    }
+
+    .clock-quote {
+      margin-top: clamp(20px, 4vh, 40px);
+      max-width: min(36em, 92%);
+      padding: 0 4px;
+    }
+
+    .clock-quote-text {
+      margin: 0;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: clamp(0.8rem, 2.6vw, 1rem);
+      line-height: 1.65;
+      color: #000000;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+
+    .clock-quote-author {
+      margin: 10px 0 0;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: clamp(0.8rem, 2.6vw, 1rem);
+      line-height: 1.4;
+      color: #555555;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+
+    /* 地平线 SVG（旧版，暂注释）
+    .clock-horizon {
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
+      position: relative;
+      width: 100%;
+      height: clamp(56px, 10vh, 88px);
+      margin-top: clamp(8px, 2vh, 20px);
+      overflow: hidden;
+    }
+
+    .clock-horizon-bg {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 100%;
+      background-image: url('assets/clock/horizon.png');
+      background-repeat: repeat-x;
+      background-position: left bottom;
+      background-size: auto 100%;
+      pointer-events: none;
+    }
+    */
+
+    /* 小羊：错落落在背景草地前景区 */
+    .clock-sheep {
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: clamp(52px, 9vh, 80px);
+      margin: 0 0 clamp(20px, 5vh, 48px);
+      pointer-events: none;
+    }
+
+    .clock-sheep img {
+      position: absolute;
+      display: block;
+      width: 40px;
+      height: auto;
+      bottom: 0;
+      -webkit-transform-origin: center bottom;
+      transform-origin: center bottom;
+    }
+
+    .clock-sheep img:nth-child(1) {
+      left: 36%;
+      width: 34px;
+      bottom: 10px;
+      -webkit-transform: rotate(-6deg);
+      transform: rotate(-6deg);
+    }
+
+    .clock-sheep img:nth-child(2) {
+      left: 46%;
+      width: 44px;
+      bottom: 0;
+      -webkit-transform: rotate(4deg) translateY(-4px);
+      transform: rotate(4deg) translateY(-4px);
+    }
+
+    .clock-sheep img:nth-child(3) {
+      left: 56%;
+      width: 32px;
+      bottom: 16px;
+      -webkit-transform: rotate(-3deg) translateX(6px);
+      transform: rotate(-3deg) translateX(6px);
+    }
+
+    @media (min-width: 1024px) and (min-height: 600px) {
+      #view-clock.view-main {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+        padding-top: clamp(28px, 5vh, 56px);
+      }
+
+      .clock-time {
+        font-size: clamp(6rem, 12vw, 9rem);
+      }
+
+      .clock-quote {
+        margin-top: clamp(28px, 5vh, 52px);
+        max-width: 40em;
+      }
+
+      .clock-sheep {
+        height: 88px;
+        margin-bottom: clamp(28px, 6vh, 64px);
+      }
+
+      .clock-sheep img {
+        width: 52px;
+      }
+
+      .clock-sheep img:nth-child(1) {
+        left: 38%;
+        width: 44px;
+        bottom: 14px;
+        -webkit-transform: rotate(-5deg);
+        transform: rotate(-5deg);
+      }
+
+      .clock-sheep img:nth-child(2) {
+        left: 47%;
+        width: 56px;
+        bottom: 0;
+        -webkit-transform: rotate(3deg) translateY(-6px);
+        transform: rotate(3deg) translateY(-6px);
+      }
+
+      .clock-sheep img:nth-child(3) {
+        left: 55%;
+        width: 42px;
+        bottom: 20px;
+        -webkit-transform: rotate(-2deg) translateX(8px);
+        transform: rotate(-2deg) translateX(8px);
+      }
+    }
   </style>
 </head>
 <body>
   <div class="app-shell">
-    <div
-      class="app-shell-bg"
-      id="web-bg"
-      aria-hidden="true"
-      style="background-image: url('assets/covers/cover-forest.png');"
-    ></div>
     <div class="app-frame">
       <!-- 主内容：电子日历 -->
       <main id="view-calendar" class="view-main">
@@ -818,9 +1078,37 @@
         </div>
       </main>
 
-      <!-- 占位：其他页（后续实现） -->
-      <main id="view-clock" class="view-main is-hidden" style="align-items: center; justify-content: center;">
-        <p class="text-mute text-sm">时钟页 · 即将上线</p>
+      <!-- Tab 2：墨水屏时钟 -->
+      <main id="view-clock" class="view-main is-hidden" aria-label="墨水屏时钟">
+        <div class="clock-bg" aria-hidden="true"></div>
+        <div class="clock-page">
+          <div class="clock-header" id="clock-header" aria-live="polite">
+            <span id="clock-date">—</span><span class="clock-header-sep">|</span><span id="clock-place">—</span><span class="clock-weather-icon" id="clock-weather-icon" aria-hidden="true"></span><span id="clock-weather-temp"></span>
+          </div>
+
+          <div class="clock-center">
+            <div class="clock-time-row">
+              <h1 class="clock-time" id="clock-time">——:——</h1>
+              <span class="clock-ampm" id="clock-ampm">--</span>
+            </div>
+            <blockquote class="clock-quote">
+              <p class="clock-quote-text" id="clock-quote-text"></p>
+              <footer class="clock-quote-author" id="clock-quote-author"></footer>
+            </blockquote>
+          </div>
+
+          <!-- 地平线旧版（暂注释）
+          <div class="clock-horizon" aria-hidden="true">
+            <div class="clock-horizon-bg"></div>
+          </div>
+          -->
+
+          <div class="clock-sheep" aria-hidden="true">
+            <img src="assets/clock/sheep.png" alt="" width="34" height="34" />
+            <img src="assets/clock/sheep.png" alt="" width="44" height="44" />
+            <img src="assets/clock/sheep.png" alt="" width="32" height="32" />
+          </div>
+        </div>
       </main>
       <main id="view-pomo" class="view-main is-hidden" style="align-items: center; justify-content: center;">
         <p class="text-mute text-sm">番茄钟 · 即将上线</p>
@@ -1045,6 +1333,8 @@
           rotateCoverScene();
           renderCalendar(getAppDate());
           syncDailyWorkers(getAppDate());
+          rotateClockQuote();
+          renderClockDate(getAppDate());
         }, 60000);
       }
 
@@ -1064,11 +1354,6 @@
             applyScene(csvFallbackScene);
           }
         };
-
-        var webBg = document.getElementById('web-bg');
-        if (webBg) {
-          webBg.style.backgroundImage = 'url(' + scene.image + ')';
-        }
       }
 
       /** 今日工位占位图标（首次上班打卡随机解锁其一） */
@@ -1272,7 +1557,41 @@
       /** 底部滑块切换：左=日历 / 中=时钟 / 右=番茄钟 */
       var PAGES = ['calendar', 'clock', 'pomo'];
 
-      function switchPage(page) {
+      function getPageFromUrl() {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          var tab = params.get('tab');
+          /* 无 tab 参数：/ 与 /index.html 均视为日历 */
+          if (!tab) return 'calendar';
+          var key = String(tab).trim().toLowerCase();
+          if (PAGES.indexOf(key) >= 0) return key;
+        } catch (e) {
+          /* URLSearchParams 不可用时回退日历 */
+        }
+        return 'calendar';
+      }
+
+      /** 同步 ?tab= 到地址栏；日历可省略参数，?tab=calendar 与 /、/index.html 等效 */
+      function syncPageUrl(page) {
+        try {
+          var url = new URL(window.location.href);
+          if (page === 'calendar') {
+            url.searchParams.delete('tab');
+          } else {
+            url.searchParams.set('tab', page);
+          }
+          var next = url.pathname + url.search + url.hash;
+          var current = window.location.pathname + window.location.search + window.location.hash;
+          if (next !== current) {
+            window.history.replaceState({ tab: page }, '', next);
+          }
+        } catch (e) {
+          /* 忽略古董浏览器 URL API 失败 */
+        }
+      }
+
+      function switchPage(page, options) {
+        options = options || {};
         var index = PAGES.indexOf(page);
         if (index < 0) return;
 
@@ -1294,6 +1613,10 @@
           var selected = zone.getAttribute('data-page') === page;
           zone.setAttribute('aria-selected', selected ? 'true' : 'false');
         });
+
+        if (!options.skipUrl) {
+          syncPageUrl(page);
+        }
       }
 
       function initPageNav() {
@@ -1303,7 +1626,249 @@
             switchPage(zone.getAttribute('data-page'));
           });
         });
-        switchPage('calendar');
+        switchPage(getPageFromUrl(), { skipUrl: true });
+      }
+
+      /** —— Tab 2 墨水屏时钟 —— */
+      var CLOCK_QUOTES = [
+        {
+          text: 'All complex systems eventually drift toward disorder—but here, the clock moves slowly.',
+          author: 'Cyber Cubicle Observation Log',
+        },
+        {
+          text: "If you can't make the perfect call today, go watch those three sheep grazing.",
+          author: 'Anonymous AFK Worker',
+        },
+        {
+          text: "As long as these three sheep are still grazing, the world's entropy has nothing to do with me.",
+          author: 'Cyber Cubicle Observation Log',
+        },
+        {
+          text: "Don't panic—the clock is elegantly spending your anxiety, once per minute.",
+          author: 'The Aesthetics of E-Ink Time',
+        },
+        {
+          text: 'Time is the only hard currency, and you just spent 25 minutes on a pixel sheep.',
+          author: 'Blind Box Economics',
+        },
+        {
+          text: 'This screen once held houses of gold; now it only wants to quietly hold a bucket of instant noodles.',
+          author: 'Confessions of a Kindle',
+        },
+        {
+          text: 'We sprint through the torrent of modern life, yet land here in the tick of this antique device.',
+          author: 'Digital Nomad Refuge',
+        },
+        {
+          text: 'The pomodoro will end, the task will ship. But this sunlight and wind are free open-source assets.',
+          author: "The Indie Developer's Roaming Guide",
+        },
+        {
+          text: 'Lock the most modern anxiety into this oldest machine—that is electronic jailbreak.',
+          author: 'Deconstructionist E-Book',
+        },
+        {
+          text: 'The world iterates wildly; version numbers keep refreshing. But the horizon here never updates.',
+          author: 'Lite Edition Bottom Code Footnotes',
+        },
+      ];
+
+      var MONTH_NAMES = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December',
+      ];
+      var WEEKDAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+      var lastClockMinuteKey = null;
+
+      function ordinalDay(n) {
+        var mod100 = n % 100;
+        if (mod100 >= 11 && mod100 <= 13) return n + 'th';
+        switch (n % 10) {
+          case 1: return n + 'st';
+          case 2: return n + 'nd';
+          case 3: return n + 'rd';
+          default: return n + 'th';
+        }
+      }
+
+      function formatClockDate(date) {
+        return MONTH_NAMES[date.getMonth()] + ' ' + ordinalDay(date.getDate()) + ', ' + WEEKDAY_NAMES[date.getDay()];
+      }
+
+      function formatClockTime(date) {
+        var hours24 = date.getHours();
+        var hours12 = hours24 % 12;
+        if (hours12 === 0) hours12 = 12;
+        return {
+          time: pad2(hours12) + ':' + pad2(date.getMinutes()),
+          ampm: hours24 < 12 ? 'AM' : 'PM',
+        };
+      }
+
+      function minuteKey(date) {
+        return dateKey(date) + 'T' + pad2(date.getHours()) + ':' + pad2(date.getMinutes());
+      }
+
+      function renderClockTime(date) {
+        var formatted = formatClockTime(date);
+        var timeEl = document.getElementById('clock-time');
+        var ampmEl = document.getElementById('clock-ampm');
+        if (!timeEl || !ampmEl) return;
+
+        if (timeEl.textContent !== formatted.time) {
+          timeEl.textContent = formatted.time;
+        }
+        if (ampmEl.textContent !== formatted.ampm) {
+          ampmEl.textContent = formatted.ampm;
+        }
+      }
+
+      function renderClockDate(date) {
+        var dateEl = document.getElementById('clock-date');
+        if (!dateEl) return;
+        var label = formatClockDate(date);
+        if (dateEl.textContent !== label) {
+          dateEl.textContent = label;
+        }
+      }
+
+      function applyClockQuote(quote) {
+        var textEl = document.getElementById('clock-quote-text');
+        var authorEl = document.getElementById('clock-quote-author');
+        if (!textEl || !authorEl || !quote) return;
+        textEl.textContent = quote.text;
+        authorEl.textContent = '— ' + quote.author;
+      }
+
+      function pickRandomQuote() {
+        return CLOCK_QUOTES[Math.floor(Math.random() * CLOCK_QUOTES.length)];
+      }
+
+      /** 刷新页面或跨天：随机一组文案 */
+      function rotateClockQuote() {
+        applyClockQuote(pickRandomQuote());
+      }
+
+      /** WMO weather code → emoji（Open-Meteo） */
+      function weatherCodeToEmoji(code) {
+        if (code === 0) return '☀️';
+        if (code === 1 || code === 2) return '🌤';
+        if (code === 3) return '☁️';
+        if (code === 45 || code === 48) return '🌫';
+        if (code >= 51 && code <= 67) return '🌧';
+        if (code >= 71 && code <= 77) return '❄️';
+        if (code >= 80 && code <= 82) return '🌦';
+        if (code >= 85 && code <= 86) return '🌨';
+        if (code >= 95) return '⛈';
+        return '🌤';
+      }
+
+      function renderClockWeather(place, emoji, tempRange) {
+        var placeEl = document.getElementById('clock-place');
+        var iconEl = document.getElementById('clock-weather-icon');
+        var tempEl = document.getElementById('clock-weather-temp');
+        if (!placeEl || !iconEl || !tempEl) return;
+
+        placeEl.textContent = place || '—';
+        iconEl.textContent = emoji ? (' ' + emoji + ' ') : '';
+        tempEl.textContent = tempRange || '';
+      }
+
+      /**
+       * 定位与天气：
+       * 浏览器 JS 读不到本机公网 IP，需请求第三方 IP 地理接口（免授权）；
+       * 再用 Open-Meteo（免 key）拉当地气温与天气码。
+       * 不使用 Geolocation API，避免弹权限框。
+       */
+      function fetchIpGeo() {
+        return fetch('https://ipwho.is/')
+          .then(function (res) {
+            if (!res.ok) throw new Error('ipwho failed');
+            return res.json();
+          })
+          .then(function (data) {
+            if (!data || data.success === false) throw new Error('ipwho invalid');
+            var lat = data.latitude;
+            var lon = data.longitude;
+            if (lat == null || lon == null) throw new Error('no coords');
+            return {
+              city: data.city || data.region || data.country || '',
+              lat: lat,
+              lon: lon,
+            };
+          })
+          .catch(function () {
+            return fetch('https://get.geojs.io/v1/ip/geo.json')
+              .then(function (res) {
+                if (!res.ok) throw new Error('geojs failed');
+                return res.json();
+              })
+              .then(function (data) {
+                var lat = parseFloat(data.latitude);
+                var lon = parseFloat(data.longitude);
+                if (isNaN(lat) || isNaN(lon)) throw new Error('geojs no coords');
+                return {
+                  city: data.city || data.region || data.country || '',
+                  lat: lat,
+                  lon: lon,
+                };
+              });
+          });
+      }
+
+      function loadClockWeather() {
+        renderClockWeather('定位中…', '', '');
+
+        return fetchIpGeo()
+          .then(function (geo) {
+            var weatherUrl =
+              'https://api.open-meteo.com/v1/forecast'
+              + '?latitude=' + encodeURIComponent(geo.lat)
+              + '&longitude=' + encodeURIComponent(geo.lon)
+              + '&current=weather_code'
+              + '&daily=temperature_2m_max,temperature_2m_min'
+              + '&timezone=auto'
+              + '&forecast_days=1';
+
+            return fetch(weatherUrl).then(function (res) {
+              if (!res.ok) throw new Error('weather failed');
+              return res.json();
+            }).then(function (weather) {
+              var code = weather.current && weather.current.weather_code;
+              var mins = weather.daily && weather.daily.temperature_2m_min;
+              var maxs = weather.daily && weather.daily.temperature_2m_max;
+              var minT = mins && mins.length ? Math.round(mins[0]) : null;
+              var maxT = maxs && maxs.length ? Math.round(maxs[0]) : null;
+              var range = (minT != null && maxT != null) ? (minT + '~' + maxT + '°C') : '';
+              renderClockWeather(geo.city || '—', weatherCodeToEmoji(code), range);
+            });
+          })
+          .catch(function () {
+            renderClockWeather('—', '', '');
+          });
+      }
+
+      function tickClockDisplay() {
+        var now = getAppDate();
+        var key = minuteKey(now);
+        if (key === lastClockMinuteKey) return;
+        lastClockMinuteKey = key;
+        renderClockTime(now);
+        renderClockDate(now);
+      }
+
+      function initClockPage() {
+        rotateClockQuote();
+        tickClockDisplay();
+        loadClockWeather();
+
+        /** 每分钟局部刷新；对齐到下一整分后再固定 60s 间隔 */
+        var msToNextMinute = 60000 - (Date.now() % 60000) + 50;
+        setTimeout(function () {
+          tickClockDisplay();
+          setInterval(tickClockDisplay, 60000);
+        }, msToNextMinute);
       }
 
       var WORK_CLOCK_KEY = 'work_clock';
@@ -1424,6 +1989,7 @@
           syncDailyWorkers(today);
           initPageNav();
           initWorkClock();
+          initClockPage();
           initCoverMidnightWatch();
         });
 
