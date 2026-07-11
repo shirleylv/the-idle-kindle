@@ -1032,6 +1032,356 @@
         transform: rotate(-2deg) translateX(8px);
       }
     }
+
+    /* —— Tab 3 番茄上班钟 —— */
+    :root {
+      --worker-size-sm: 18px;
+      --worker-size-md: 24px;
+      --worker-size-lg: 30px;
+    }
+
+    @media (min-width: 768px) {
+      :root {
+        --worker-size-sm: 20px;
+        --worker-size-md: 26px;
+        --worker-size-lg: 32px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      :root {
+        --worker-size-sm: 22px;
+        --worker-size-md: 28px;
+        --worker-size-lg: 34px;
+      }
+    }
+
+    .worker-icon--small {
+      width: var(--worker-size-sm);
+      height: var(--worker-size-sm);
+    }
+
+    .worker-icon--medium {
+      width: var(--worker-size-md);
+      height: var(--worker-size-md);
+    }
+
+    .worker-icon--large {
+      width: var(--worker-size-lg);
+      height: var(--worker-size-lg);
+    }
+
+    #view-pomo.view-main {
+      position: relative;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      justify-content: space-between;
+      padding-top: clamp(12px, 2.5vh, 28px);
+      padding-bottom: 0;
+      overflow: hidden;
+    }
+
+    .pomo-bg {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 0;
+      background-image: url('assets/clock/bg-meadow.png');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      opacity: 0.2;
+      pointer-events: none;
+      -webkit-filter: grayscale(100%);
+      filter: grayscale(100%);
+    }
+
+    .pomo-page {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-pack: justify;
+      -webkit-justify-content: space-between;
+      justify-content: space-between;
+    }
+
+    .pomo-header {
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
+      width: 100%;
+      margin-top: 60px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: clamp(0.9rem, 3.2vw, 1.1rem);
+      line-height: 1.4;
+      color: #000000;
+      letter-spacing: 0.02em;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pomo-header-group {
+      display: -webkit-inline-box;
+      display: -webkit-inline-flex;
+      display: inline-flex;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      gap: 0.35em;
+      vertical-align: middle;
+    }
+
+    .pomo-header-sheep {
+      width: clamp(20px, 5vw, 24px);
+      height: clamp(20px, 5vw, 24px);
+      display: block;
+      object-fit: contain;
+      -webkit-flex-shrink: 0;
+      flex-shrink: 0;
+    }
+
+    .pomo-sizes {
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 0 auto;
+      flex: 0 0 auto;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: row;
+      flex-direction: row;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      -webkit-box-align: end;
+      -webkit-align-items: flex-end;
+      align-items: flex-end;
+      gap: clamp(12px, 4vw, 28px);
+      margin-top: auto;
+      padding: clamp(12px, 2.5vh, 24px) 8px clamp(8px, 2vh, 16px);
+    }
+
+    .pomo-sizes.is-hidden {
+      display: none;
+    }
+
+    .pomo-center {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 auto;
+      flex: 1 1 auto;
+      min-height: 0;
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      text-align: center;
+      padding: clamp(8px, 2vh, 24px) 0;
+    }
+
+    .pomo-time-row {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: end;
+      -webkit-align-items: flex-end;
+      align-items: flex-end;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      gap: clamp(6px, 1.5vw, 14px);
+      line-height: 1;
+    }
+
+    .pomo-controls {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-align: start;
+      -webkit-align-items: flex-start;
+      align-items: flex-start;
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      gap: clamp(16px, 5vw, 36px);
+      margin-top: clamp(16px, 3vh, 28px);
+      min-height: 72px;
+    }
+
+    .pomo-ctrl-btn {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      gap: 6px;
+      min-width: 56px;
+      min-height: 50px;
+      padding: 4px 8px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: clamp(0.7rem, 2.4vw, 0.85rem);
+      color: #000000;
+      -webkit-flex-shrink: 0;
+      flex-shrink: 0;
+    }
+
+    .pomo-ctrl-btn:focus {
+      outline: 2px solid #000000;
+      outline-offset: 2px;
+    }
+
+    .pomo-ctrl-btn:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    .pomo-ctrl-btn.is-hidden {
+      display: none;
+    }
+
+    .pomo-ctrl-btn img {
+      width: clamp(40px, 10vw, 48px);
+      height: clamp(40px, 10vw, 48px);
+      display: block;
+      -webkit-filter: brightness(0);
+      filter: brightness(0);
+    }
+
+    .pomo-quote {
+      margin-top: clamp(16px, 3vh, 32px);
+      max-width: min(36em, 92%);
+      padding: 0 4px;
+    }
+
+    .pomo-quote-text {
+      margin: 0;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: clamp(0.8rem, 2.6vw, 1rem);
+      line-height: 1.65;
+      color: #000000;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+
+    .pomo-quote-author {
+      margin: 10px 0 0;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: clamp(0.8rem, 2.6vw, 1rem);
+      line-height: 1.4;
+      color: #555555;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+    }
+
+    #pomo-break-hint.is-hidden {
+      display: none;
+    }
+
+    .pomo-size-btn {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-align: center;
+      -webkit-align-items: center;
+      align-items: center;
+      gap: 4px;
+      min-width: 56px;
+      min-height: 50px;
+      padding: 4px 6px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: clamp(0.7rem, 2.4vw, 0.85rem);
+      color: #000000;
+    }
+
+    .pomo-size-btn:focus {
+      outline: 2px solid #000000;
+      outline-offset: 2px;
+    }
+
+    .pomo-size-btn img {
+      display: block;
+      -webkit-filter: brightness(0);
+      filter: brightness(0);
+      object-fit: contain;
+    }
+
+    .pomo-size-btn[data-tier="tall"] img {
+      width: clamp(28px, 7vw, 34px);
+      height: clamp(28px, 7vw, 34px);
+    }
+
+    .pomo-size-btn[data-tier="grande"] img {
+      width: clamp(34px, 8.5vw, 42px);
+      height: clamp(34px, 8.5vw, 42px);
+    }
+
+    .pomo-size-btn[data-tier="venti"] img {
+      width: clamp(40px, 10vw, 50px);
+      height: clamp(40px, 10vw, 50px);
+    }
+
+    .pomo-size-check {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #000000;
+      margin-top: 2px;
+    }
+
+    .pomo-size-btn.is-selected .pomo-size-check {
+      background: #000000;
+    }
+
+    @media (min-width: 1024px) and (min-height: 600px) {
+      #view-pomo.view-main {
+        padding-top: clamp(28px, 5vh, 56px);
+      }
+
+      #view-pomo .clock-time {
+        font-size: clamp(6rem, 12vw, 9rem);
+      }
+
+      .pomo-quote {
+        margin-top: clamp(28px, 5vh, 52px);
+        max-width: 40em;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1110,8 +1460,66 @@
           </div>
         </div>
       </main>
-      <main id="view-pomo" class="view-main is-hidden" style="align-items: center; justify-content: center;">
-        <p class="text-mute text-sm">番茄钟 · 即将上线</p>
+      <!-- Tab 3：番茄上班钟 -->
+      <main id="view-pomo" class="view-main is-hidden" aria-label="番茄上班钟">
+        <div class="pomo-bg" aria-hidden="true"></div>
+        <div class="pomo-page">
+          <div class="pomo-header" id="pomo-header" aria-live="polite">
+            <span class="pomo-header-group">
+              <img class="pomo-header-sheep" src="assets/clock/sheep.png" alt="" width="22" height="22" />
+              <span id="pomo-status-text">来杯咖啡，精神加倍～</span>
+            </span>
+          </div>
+
+          <div class="pomo-center">
+            <div class="pomo-time-row">
+              <h1 class="clock-time" id="pomo-time">25:00</h1>
+              <span class="clock-ampm" id="pomo-break-hint">+5min</span>
+            </div>
+
+            <div class="pomo-controls" id="pomo-controls">
+              <button type="button" class="pomo-ctrl-btn is-hidden" id="pomo-btn-reset" data-action="reset" aria-label="重置">
+                <img src="assets/pomo/btn-reset.png" alt="" width="48" height="48" />
+                <span>重置</span>
+              </button>
+              <button type="button" class="pomo-ctrl-btn" id="pomo-btn-start" data-action="start" aria-label="开始">
+                <img src="assets/pomo/btn-start.png" alt="" width="48" height="48" />
+                <span>开始</span>
+              </button>
+              <button type="button" class="pomo-ctrl-btn is-hidden" id="pomo-btn-pause" data-action="pause" aria-label="暂停">
+                <img src="assets/pomo/btn-pause.png" alt="" width="48" height="48" />
+                <span>暂停</span>
+              </button>
+              <button type="button" class="pomo-ctrl-btn is-hidden" id="pomo-btn-reselect" data-action="reselect" aria-label="再来一杯">
+                <img src="assets/pomo/btn-reselect.png" alt="" width="48" height="48" />
+                <span>再来一杯</span>
+              </button>
+            </div>
+
+            <blockquote class="pomo-quote">
+              <p class="pomo-quote-text" id="pomo-quote-text"></p>
+              <footer class="pomo-quote-author" id="pomo-quote-author"></footer>
+            </blockquote>
+          </div>
+
+          <div class="pomo-sizes" id="pomo-sizes" role="radiogroup" aria-label="选择番茄钟规格">
+            <button type="button" class="pomo-size-btn is-selected" data-tier="tall" role="radio" aria-checked="true">
+              <img src="assets/pomo/cup-tall.png" alt="" width="32" height="32" />
+              <span>Tall</span>
+              <span class="pomo-size-check" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="pomo-size-btn" data-tier="grande" role="radio" aria-checked="false">
+              <img src="assets/pomo/cup-grande.png" alt="" width="38" height="38" />
+              <span>Grande</span>
+              <span class="pomo-size-check" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="pomo-size-btn" data-tier="venti" role="radio" aria-checked="false">
+              <img src="assets/pomo/cup-venti.png" alt="" width="46" height="46" />
+              <span>Venti</span>
+              <span class="pomo-size-check" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
       </main>
 
       <!-- 2. 三段滑块：固定高度，紧贴 footer -->
@@ -1356,7 +1764,7 @@
         };
       }
 
-      /** 今日工位占位图标（首次上班打卡随机解锁其一） */
+      /** 今日工位占位图标（首次上班打卡 / 番茄钟随机解锁） */
       var WORKER_ICONS = {
         cheese: { src: 'assets/blind-box/worker-cheese.png', alt: '奶酪' },
         crab: { src: 'assets/blind-box/worker-crab.png', alt: '螃蟹' },
@@ -1364,6 +1772,32 @@
       };
 
       var STARTER_WORKERS = ['cheese', 'crab', 'salad'];
+
+      function normalizeWorkerEntry(entry) {
+        if (typeof entry === 'string') {
+          return { id: entry, size: 'medium' };
+        }
+        if (entry && entry.id) {
+          return { id: entry.id, size: entry.size || 'medium' };
+        }
+        return null;
+      }
+
+      function normalizeWorkersList(list) {
+        var normalized = [];
+        var i;
+        for (i = 0; i < list.length; i++) {
+          var item = normalizeWorkerEntry(list[i]);
+          if (item) normalized.push(item);
+        }
+        return normalized;
+      }
+
+      function workerSizeClass(size) {
+        if (size === 'small') return 'worker-icon--small';
+        if (size === 'large') return 'worker-icon--large';
+        return 'worker-icon--medium';
+      }
 
       function pad2(n) {
         return n < 10 ? '0' + n : String(n);
@@ -1441,7 +1875,7 @@
       /** localStorage：跨天清空今日工位 */
       function getTodayWorkers() {
         try {
-          return JSON.parse(localStorage.getItem('today_workers') || '[]');
+          return normalizeWorkersList(JSON.parse(localStorage.getItem('today_workers') || '[]'));
         } catch (e) {
           return [];
         }
@@ -1500,15 +1934,15 @@
         countEl.textContent = '+' + workers.length;
 
         el.innerHTML = '';
-        workers.forEach(function (id) {
-          var icon = WORKER_ICONS[id];
+        workers.forEach(function (entry) {
+          var normalized = normalizeWorkerEntry(entry);
+          if (!normalized) return;
+          var icon = WORKER_ICONS[normalized.id];
           if (!icon) return;
           var img = document.createElement('img');
           img.src = icon.src;
           img.alt = icon.alt;
-          img.className = 'worker-icon';
-          img.width = 24;
-          img.height = 24;
+          img.className = 'worker-icon ' + workerSizeClass(normalized.size);
           img.onload = updateWorkersOverflow;
           el.appendChild(img);
         });
@@ -1526,7 +1960,7 @@
         if (workers.length) return workers;
 
         var pick = STARTER_WORKERS[Math.floor(Math.random() * STARTER_WORKERS.length)];
-        workers.push(pick);
+        workers.push({ id: pick, size: 'medium' });
         saveTodayWorkers(workers);
 
         var unlocked = getUnlockedList();
@@ -1871,6 +2305,425 @@
         }, msToNextMinute);
       }
 
+      /** —— Tab 3 番茄上班钟 —— */
+      var POMO_STORAGE_KEY = 'pomo_timer';
+
+      var POMO_TIERS = {
+        tall: { focusMin: 25, breakMin: 5, boxSize: 'small', label: 'Tall' },
+        grande: { focusMin: 50, breakMin: 10, boxSize: 'medium', label: 'Grande' },
+        venti: { focusMin: 90, breakMin: 15, boxSize: 'large', label: 'Venti' },
+      };
+
+      var POMO_STATUS_POOLS = {
+        idle: ['来杯咖啡，精神加倍～', '今天喝什么，我们有中杯、大杯、超大杯～'],
+        focus: ['专注中～', '沉浸式工作ing', '别来烦我！'],
+        break: ['休息一下～', '喝口水～咕噜咕噜咕噜', '上个厕所～', '摸会儿鱼～'],
+        done: ['人生无解，多喝拿铁', '手握馥芮白，早晚发大财', '有事启奏，美式退朝', '浓缩加倍，加班不累'],
+      };
+
+      var pomoState = null;
+      var pomoTickTimer = null;
+
+      function defaultPomoState() {
+        return {
+          phase: 'idle',
+          tier: 'tall',
+          remainingMs: POMO_TIERS.tall.focusMin * 60000,
+          running: false,
+          statusMessage: '',
+          updatedAt: Date.now(),
+        };
+      }
+
+      function pickPomoStatus(poolKey) {
+        var pool = POMO_STATUS_POOLS[poolKey];
+        if (!pool || !pool.length) return '';
+        return pool[Math.floor(Math.random() * pool.length)];
+      }
+
+      function tierFocusMs(tier) {
+        return POMO_TIERS[tier].focusMin * 60000;
+      }
+
+      function tierBreakMs(tier) {
+        return POMO_TIERS[tier].breakMin * 60000;
+      }
+
+      function formatPomoCountdown(ms) {
+        var totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+        var minutes = Math.floor(totalSeconds / 60);
+        var seconds = totalSeconds % 60;
+        return pad2(minutes) + ':' + pad2(seconds);
+      }
+
+      function formatBreakHint(tier) {
+        return '+' + POMO_TIERS[tier].breakMin + 'min';
+      }
+
+      function getPomoRemainingMs(state) {
+        if (!state.running) return state.remainingMs;
+        var elapsed = Date.now() - state.updatedAt;
+        return Math.max(0, state.remainingMs - elapsed);
+      }
+
+      function loadPomoState() {
+        try {
+          var raw = localStorage.getItem(POMO_STORAGE_KEY);
+          if (!raw) return defaultPomoState();
+          var parsed = JSON.parse(raw);
+          if (!parsed || !parsed.phase) return defaultPomoState();
+          if (parsed.phase === 'done') {
+            parsed.tier = null;
+            parsed.remainingMs = 0;
+            parsed.running = false;
+          }
+          if (parsed.phase === 'idle' && !parsed.tier) {
+            parsed.tier = 'tall';
+            parsed.remainingMs = tierFocusMs('tall');
+          }
+          if (!parsed.statusMessage) {
+            parsed.statusMessage = pickPomoStatus(parsed.phase === 'done' ? 'done' : 'idle');
+          }
+          parsed.updatedAt = parsed.updatedAt || Date.now();
+          return parsed;
+        } catch (e) {
+          return defaultPomoState();
+        }
+      }
+
+      function savePomoState(state) {
+        localStorage.setItem(POMO_STORAGE_KEY, JSON.stringify(state));
+      }
+
+      function syncPomoRemaining(state) {
+        if (state.running) {
+          state.remainingMs = getPomoRemainingMs(state);
+          state.running = false;
+        }
+        state.updatedAt = Date.now();
+      }
+
+      function setPomoStatus(poolKey, state) {
+        state.statusMessage = pickPomoStatus(poolKey);
+      }
+
+      function grantPomoWorker(tier) {
+        var workers = getTodayWorkers();
+        var pick = STARTER_WORKERS[Math.floor(Math.random() * STARTER_WORKERS.length)];
+        var size = POMO_TIERS[tier].boxSize;
+        workers.push({ id: pick, size: size });
+        saveTodayWorkers(workers);
+
+        var unlocked = getUnlockedList();
+        if (unlocked.indexOf(pick) === -1) {
+          unlocked.push(pick);
+          saveUnlockedList(unlocked);
+        }
+
+        renderTodayWorkers(workers);
+      }
+
+      function pomoIsActivePhase(phase) {
+        return phase === 'focus' || phase === 'break';
+      }
+
+      function applyPomoQuote(quote) {
+        var textEl = document.getElementById('pomo-quote-text');
+        var authorEl = document.getElementById('pomo-quote-author');
+        if (!textEl || !authorEl || !quote) return;
+        textEl.textContent = quote.text;
+        authorEl.textContent = '— ' + quote.author;
+      }
+
+      function rotatePomoQuote() {
+        applyPomoQuote(pickRandomQuote());
+      }
+
+      function renderPomoSizeSelection(state) {
+        var sizesEl = document.getElementById('pomo-sizes');
+        var buttons = document.querySelectorAll('.pomo-size-btn');
+        if (!sizesEl) return;
+
+        sizesEl.classList.toggle('is-hidden', pomoIsActivePhase(state.phase));
+
+        buttons.forEach(function (btn) {
+          var tier = btn.getAttribute('data-tier');
+          var selected = !!state.tier && tier === state.tier;
+          btn.classList.toggle('is-selected', selected);
+          btn.setAttribute('aria-checked', selected ? 'true' : 'false');
+        });
+      }
+
+      function renderPomoControls(state) {
+        var active = pomoIsActivePhase(state.phase);
+        var paused = active && !state.running;
+        var btnStart = document.getElementById('pomo-btn-start');
+        var btnPause = document.getElementById('pomo-btn-pause');
+        var btnReset = document.getElementById('pomo-btn-reset');
+        var btnReselect = document.getElementById('pomo-btn-reselect');
+
+        if (!btnStart) return;
+
+        btnStart.classList.toggle('is-hidden', !((state.phase === 'idle' || state.phase === 'done') || paused));
+        btnPause.classList.toggle('is-hidden', !(active && state.running));
+        btnReset.classList.toggle('is-hidden', !active);
+        btnReselect.classList.toggle('is-hidden', !active);
+
+        var canStart = (state.phase === 'idle' && !!state.tier) || paused;
+        btnStart.disabled = !canStart;
+        btnStart.querySelector('span').textContent = paused ? '继续' : '开始';
+        btnStart.setAttribute('aria-label', paused ? '继续' : '开始');
+      }
+
+      function renderPomoDisplay(state) {
+        var timeEl = document.getElementById('pomo-time');
+        var hintEl = document.getElementById('pomo-break-hint');
+        var statusEl = document.getElementById('pomo-status-text');
+        if (!timeEl || !hintEl || !statusEl) return;
+
+        var remaining = getPomoRemainingMs(state);
+
+        if (state.phase === 'done') {
+          timeEl.textContent = '00:00';
+        } else if (state.phase === 'idle') {
+          timeEl.textContent = state.tier ? formatPomoCountdown(tierFocusMs(state.tier)) : '00:00';
+        } else {
+          timeEl.textContent = formatPomoCountdown(remaining);
+        }
+
+        var showHint = !!state.tier && state.phase !== 'break' && state.phase !== 'done';
+        hintEl.classList.toggle('is-hidden', !showHint);
+        if (showHint) {
+          hintEl.textContent = formatBreakHint(state.tier);
+        }
+
+        statusEl.textContent = state.statusMessage || pickPomoStatus('idle');
+        renderPomoSizeSelection(state);
+        renderPomoControls(state);
+      }
+
+      function commitPomoState(state) {
+        savePomoState(state);
+        renderPomoDisplay(state);
+      }
+
+      function enterPomoIdle(state, options) {
+        options = options || {};
+        state.phase = 'idle';
+        state.running = false;
+        state.tier = options.tier !== undefined ? options.tier : 'tall';
+        state.remainingMs = state.tier ? tierFocusMs(state.tier) : 0;
+        state.updatedAt = Date.now();
+        if (options.pickStatus !== false) {
+          setPomoStatus('idle', state);
+        }
+      }
+
+      function enterPomoDone(state) {
+        state.phase = 'done';
+        state.tier = null;
+        state.remainingMs = 0;
+        state.running = false;
+        state.updatedAt = Date.now();
+        setPomoStatus('done', state);
+      }
+
+      function startPomoFocus(state) {
+        if (!state.tier) return;
+        state.phase = 'focus';
+        state.remainingMs = tierFocusMs(state.tier);
+        state.running = true;
+        state.updatedAt = Date.now();
+        setPomoStatus('focus', state);
+      }
+
+      function startPomoBreak(state) {
+        state.phase = 'break';
+        state.remainingMs = tierBreakMs(state.tier);
+        state.running = true;
+        state.updatedAt = Date.now();
+        setPomoStatus('break', state);
+      }
+
+      function handlePomoPhaseComplete(state) {
+        if (state.phase === 'focus') {
+          startPomoBreak(state);
+          commitPomoState(state);
+          return;
+        }
+
+        if (state.phase === 'break') {
+          var completedTier = state.tier;
+          grantPomoWorker(completedTier);
+          enterPomoDone(state);
+          commitPomoState(state);
+        }
+      }
+
+      function tickPomoTimer() {
+        if (!pomoState || !pomoState.running) return;
+
+        var remaining = getPomoRemainingMs(pomoState);
+        if (remaining <= 0) {
+          syncPomoRemaining(pomoState);
+          pomoState.remainingMs = 0;
+          handlePomoPhaseComplete(pomoState);
+          savePomoState(pomoState);
+          return;
+        }
+
+        renderPomoDisplay(pomoState);
+        savePomoState(pomoState);
+      }
+
+      function ensurePomoTick() {
+        if (pomoTickTimer) return;
+        pomoTickTimer = setInterval(tickPomoTimer, 1000);
+      }
+
+      function onPomoStart() {
+        syncPomoRemaining(pomoState);
+
+        if (pomoState.phase === 'idle' || pomoState.phase === 'done') {
+          if (!pomoState.tier) return;
+          if (pomoState.phase === 'done') {
+            pomoState.phase = 'idle';
+          }
+          startPomoFocus(pomoState);
+        } else if (pomoIsActivePhase(pomoState.phase) && !pomoState.running) {
+          pomoState.running = true;
+          pomoState.updatedAt = Date.now();
+        }
+
+        commitPomoState(pomoState);
+        ensurePomoTick();
+      }
+
+      function onPomoPause() {
+        if (!pomoIsActivePhase(pomoState.phase) || !pomoState.running) return;
+        syncPomoRemaining(pomoState);
+        commitPomoState(pomoState);
+      }
+
+      function onPomoReset() {
+        if (!pomoIsActivePhase(pomoState.phase)) return;
+        syncPomoRemaining(pomoState);
+        pomoState.running = true;
+        pomoState.updatedAt = Date.now();
+        if (pomoState.phase === 'focus') {
+          pomoState.remainingMs = tierFocusMs(pomoState.tier);
+        } else {
+          pomoState.remainingMs = tierBreakMs(pomoState.tier);
+        }
+        commitPomoState(pomoState);
+        ensurePomoTick();
+      }
+
+      function onPomoReselect() {
+        if (!pomoIsActivePhase(pomoState.phase)) return;
+        enterPomoIdle(pomoState, { tier: 'tall' });
+        commitPomoState(pomoState);
+      }
+
+      function onPomoTierSelect(tier) {
+        if (pomoIsActivePhase(pomoState.phase)) return;
+        if (!POMO_TIERS[tier]) return;
+
+        pomoState.tier = tier;
+        if (pomoState.phase === 'done') {
+          pomoState.phase = 'idle';
+        }
+        pomoState.remainingMs = tierFocusMs(tier);
+        pomoState.running = false;
+        pomoState.updatedAt = Date.now();
+        commitPomoState(pomoState);
+      }
+
+      function reconcilePomoState(state) {
+        if (!pomoIsActivePhase(state.phase)) return state;
+
+        var remaining = getPomoRemainingMs(state);
+        var overflow = 0;
+        var didTransition = false;
+
+        while (true) {
+          if (remaining > 0) {
+            state.remainingMs = remaining;
+            if (state.running && didTransition) {
+              state.updatedAt = Date.now();
+            }
+            break;
+          }
+
+          overflow = -remaining;
+          didTransition = true;
+
+          if (state.phase === 'focus') {
+            state.phase = 'break';
+            state.remainingMs = tierBreakMs(state.tier);
+            setPomoStatus('break', state);
+            remaining = state.remainingMs - overflow;
+            overflow = 0;
+            continue;
+          }
+
+          if (state.phase === 'break') {
+            grantPomoWorker(state.tier);
+            enterPomoDone(state);
+            break;
+          }
+
+          break;
+        }
+
+        return state;
+      }
+
+      function initPomoPage() {
+        pomoState = loadPomoState();
+        pomoState = reconcilePomoState(pomoState);
+
+        if (pomoState.phase === 'idle' && !pomoState.statusMessage) {
+          setPomoStatus('idle', pomoState);
+        }
+
+        rotatePomoQuote();
+        renderPomoDisplay(pomoState);
+        savePomoState(pomoState);
+
+        if (pomoState.running) {
+          ensurePomoTick();
+        }
+
+        document.getElementById('pomo-btn-start').addEventListener('click', onPomoStart);
+        document.getElementById('pomo-btn-pause').addEventListener('click', onPomoPause);
+        document.getElementById('pomo-btn-reset').addEventListener('click', onPomoReset);
+        document.getElementById('pomo-btn-reselect').addEventListener('click', onPomoReselect);
+
+        document.querySelectorAll('.pomo-size-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            onPomoTierSelect(btn.getAttribute('data-tier'));
+          });
+        });
+
+        document.addEventListener('visibilitychange', function () {
+          if (!pomoState) return;
+          if (document.visibilityState === 'hidden') {
+            savePomoState(pomoState);
+            return;
+          }
+          pomoState = reconcilePomoState(pomoState);
+          renderPomoDisplay(pomoState);
+          savePomoState(pomoState);
+          if (pomoState.running) ensurePomoTick();
+        });
+
+        window.addEventListener('beforeunload', function () {
+          if (!pomoState) return;
+          savePomoState(pomoState);
+        });
+      }
+
       var WORK_CLOCK_KEY = 'work_clock';
 
       function defaultWorkClock() {
@@ -1990,6 +2843,7 @@
           initPageNav();
           initWorkClock();
           initClockPage();
+          initPomoPage();
           initCoverMidnightWatch();
         });
 
