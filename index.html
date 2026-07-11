@@ -934,7 +934,7 @@
     }
     */
 
-    /* 小羊：错落落在背景草地前景区 */
+    /* 小羊活动区：文案下方、滑块上方 */
     .clock-sheep {
       -webkit-box-flex: 0;
       -webkit-flex: 0 0 auto;
@@ -942,43 +942,25 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      height: clamp(52px, 9vh, 80px);
-      margin: 0 0 clamp(20px, 5vh, 48px);
+      padding-top: clamp(12px, 2vh, 18px);
+      min-height: clamp(84px, 16vh, 128px);
+      height: clamp(84px, 16vh, 128px);
+      margin: clamp(8px, 1.5vh, 16px) 0 clamp(12px, 2.5vh, 24px);
       pointer-events: none;
+      overflow: hidden;
+      box-sizing: border-box;
     }
 
     .clock-sheep img {
       position: absolute;
       display: block;
-      width: 40px;
-      height: auto;
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
       bottom: 0;
+      left: 0;
       -webkit-transform-origin: center bottom;
       transform-origin: center bottom;
-    }
-
-    .clock-sheep img:nth-child(1) {
-      left: 36%;
-      width: 34px;
-      bottom: 10px;
-      -webkit-transform: rotate(-6deg);
-      transform: rotate(-6deg);
-    }
-
-    .clock-sheep img:nth-child(2) {
-      left: 46%;
-      width: 44px;
-      bottom: 0;
-      -webkit-transform: rotate(4deg) translateY(-4px);
-      transform: rotate(4deg) translateY(-4px);
-    }
-
-    .clock-sheep img:nth-child(3) {
-      left: 56%;
-      width: 32px;
-      bottom: 16px;
-      -webkit-transform: rotate(-3deg) translateX(6px);
-      transform: rotate(-3deg) translateX(6px);
     }
 
     @media (min-width: 1024px) and (min-height: 600px) {
@@ -1000,36 +982,10 @@
       }
 
       .clock-sheep {
-        height: 88px;
-        margin-bottom: clamp(28px, 6vh, 64px);
-      }
-
-      .clock-sheep img {
-        width: 52px;
-      }
-
-      .clock-sheep img:nth-child(1) {
-        left: 38%;
-        width: 44px;
-        bottom: 14px;
-        -webkit-transform: rotate(-5deg);
-        transform: rotate(-5deg);
-      }
-
-      .clock-sheep img:nth-child(2) {
-        left: 47%;
-        width: 56px;
-        bottom: 0;
-        -webkit-transform: rotate(3deg) translateY(-6px);
-        transform: rotate(3deg) translateY(-6px);
-      }
-
-      .clock-sheep img:nth-child(3) {
-        left: 55%;
-        width: 42px;
-        bottom: 20px;
-        -webkit-transform: rotate(-2deg) translateX(8px);
-        transform: rotate(-2deg) translateX(8px);
+        padding-top: 18px;
+        min-height: 118px;
+        height: 118px;
+        margin-bottom: clamp(20px, 4vh, 40px);
       }
     }
 
@@ -1453,10 +1409,10 @@
           </div>
           -->
 
-          <div class="clock-sheep" aria-hidden="true">
-            <img src="assets/clock/sheep.png" alt="" width="34" height="34" />
-            <img src="assets/clock/sheep.png" alt="" width="44" height="44" />
-            <img src="assets/clock/sheep.png" alt="" width="32" height="32" />
+          <div class="clock-sheep" id="clock-sheep" aria-hidden="true">
+            <img src="assets/clock/sheep.png" alt="" />
+            <img src="assets/clock/sheep.png" alt="" />
+            <img src="assets/clock/sheep.png" alt="" />
           </div>
         </div>
       </main>
@@ -2051,6 +2007,16 @@
         if (!options.skipUrl) {
           syncPageUrl(page);
         }
+
+        if (page === 'clock' && clockSheepPendingLayout) {
+          if (typeof requestAnimationFrame === 'function') {
+            requestAnimationFrame(function () {
+              layoutClockSheepIfNeeded({ force: false });
+            });
+          } else {
+            layoutClockSheepIfNeeded({ force: false });
+          }
+        }
       }
 
       function initPageNav() {
@@ -2114,6 +2080,207 @@
       var WEEKDAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
       var lastClockMinuteKey = null;
+
+      /** —— 时钟页三只小羊随机布局 —— */
+      var SHEEP_SIZE_TIERS = ['sm', 'md', 'lg'];
+      var SHEEP_LAYOUT_GAP = 8;
+      var SHEEP_LAYOUT_MARGIN = 8;
+      var SHEEP_MAX_ATTEMPTS = 50;
+      var SHEEP_TOP_SAFE = 14;
+      var lastSheepHourKey = null;
+      var clockSheepLaidOut = false;
+      var clockSheepPendingLayout = false;
+
+      function hourKey(date) {
+        return dateKey(date) + 'T' + pad2(date.getHours());
+      }
+
+      function shuffleArray(list) {
+        var arr = list.slice();
+        var i = arr.length;
+        while (i) {
+          var j = Math.floor(Math.random() * i--);
+          var tmp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = tmp;
+        }
+        return arr;
+      }
+
+      function isClockSheepDesktop() {
+        return window.matchMedia('(min-width: 1024px) and (min-height: 600px)').matches;
+      }
+
+      function getSheepPixelSize(tier) {
+        if (isClockSheepDesktop()) {
+          if (tier === 'sm') return 36;
+          if (tier === 'lg') return 58;
+          return 48;
+        }
+        if (tier === 'sm') return 28;
+        if (tier === 'lg') return 48;
+        return 38;
+      }
+
+      function sheepAabb(left, bottom, size, zoneH) {
+        return {
+          left: left,
+          right: left + size,
+          top: zoneH - bottom - size,
+          bottom: zoneH - bottom,
+        };
+      }
+
+      function sheepAabbOverlap(a, b, gap) {
+        return !(
+          a.right + gap <= b.left ||
+          b.right + gap <= a.left ||
+          a.bottom + gap <= b.top ||
+          b.bottom + gap <= a.top
+        );
+      }
+
+      function getSheepMaxBottom(size, zoneH) {
+        var biasCap = Math.floor(zoneH * 0.55);
+        var hardCap = Math.max(0, zoneH - size - SHEEP_TOP_SAFE);
+        return Math.min(biasCap, hardCap);
+      }
+
+      function applySheepPlacement(img, size, left, bottom, rotate, tier) {
+        img.style.width = size + 'px';
+        img.style.height = size + 'px';
+        img.style.left = left + 'px';
+        img.style.bottom = bottom + 'px';
+        img.style.transform = 'rotate(' + rotate + 'deg)';
+        img.setAttribute('data-sheep-size', tier);
+      }
+
+      function layoutClockSheep() {
+        var zone = document.getElementById('clock-sheep');
+        if (!zone) return false;
+
+        var imgs = zone.querySelectorAll('img');
+        if (imgs.length !== 3) return false;
+
+        var zoneW = zone.clientWidth;
+        var zoneH = zone.clientHeight;
+        if (zoneW < 60 || zoneH < 24) return false;
+
+        var tiers = shuffleArray(SHEEP_SIZE_TIERS);
+        var margin = SHEEP_LAYOUT_MARGIN;
+        var placed = [];
+        var t;
+        var allOk = true;
+
+        for (t = 0; t < 3; t++) {
+          var size = getSheepPixelSize(tiers[t]);
+          var maxBottom = getSheepMaxBottom(size, zoneH);
+          var ok = false;
+          var attempt;
+          for (attempt = 0; attempt < SHEEP_MAX_ATTEMPTS; attempt++) {
+            var left = margin + Math.random() * Math.max(0, zoneW - size - margin * 2);
+            var bottom = maxBottom > 0 ? Math.random() * maxBottom : 0;
+            var rotate = Math.random() * 16 - 8;
+            var box = sheepAabb(left, bottom, size, zoneH);
+            var hit = false;
+            var p;
+            for (p = 0; p < placed.length; p++) {
+              if (sheepAabbOverlap(box, placed[p].box, SHEEP_LAYOUT_GAP)) {
+                hit = true;
+                break;
+              }
+            }
+            if (!hit) {
+              placed.push({
+                img: imgs[t],
+                size: size,
+                left: left,
+                bottom: bottom,
+                rotate: rotate,
+                tier: tiers[t],
+                box: box,
+              });
+              ok = true;
+              break;
+            }
+          }
+          if (!ok) {
+            allOk = false;
+            break;
+          }
+        }
+
+        if (!allOk) {
+          var slots = shuffleArray([
+            { leftFrac: 0.1, bottomFrac: 0.05 },
+            { leftFrac: 0.4, bottomFrac: 0.22 },
+            { leftFrac: 0.7, bottomFrac: 0.08 },
+          ]);
+          placed = [];
+          for (t = 0; t < 3; t++) {
+            size = getSheepPixelSize(tiers[t]);
+            maxBottom = getSheepMaxBottom(size, zoneH);
+            left = Math.min(
+              zoneW - size - margin,
+              Math.max(margin, slots[t].leftFrac * (zoneW - size))
+            );
+            bottom = maxBottom > 0
+              ? Math.min(maxBottom, slots[t].bottomFrac * maxBottom)
+              : 0;
+            rotate = Math.random() * 16 - 8;
+            placed.push({
+              img: imgs[t],
+              size: size,
+              left: left,
+              bottom: bottom,
+              rotate: rotate,
+              tier: tiers[t],
+            });
+          }
+        }
+
+        for (t = 0; t < placed.length; t++) {
+          applySheepPlacement(
+            placed[t].img,
+            placed[t].size,
+            placed[t].left,
+            placed[t].bottom,
+            placed[t].rotate,
+            placed[t].tier
+          );
+        }
+
+        return true;
+      }
+
+      function layoutClockSheepIfNeeded(options) {
+        options = options || {};
+        var clockView = document.getElementById('view-clock');
+        if (!clockView || clockView.classList.contains('is-hidden')) {
+          return;
+        }
+
+        var now = getAppDate();
+        var hKey = hourKey(now);
+        var hourChanged = lastSheepHourKey !== null && lastSheepHourKey !== hKey;
+        var needLayout = options.force || !clockSheepLaidOut || hourChanged;
+        if (!needLayout) return;
+
+        if (!layoutClockSheep()) {
+          clockSheepPendingLayout = true;
+          return;
+        }
+
+        lastSheepHourKey = hKey;
+        clockSheepLaidOut = true;
+        clockSheepPendingLayout = false;
+      }
+
+      function maybeRelayoutClockSheep(date) {
+        var hKey = hourKey(date);
+        if (lastSheepHourKey === hKey) return;
+        layoutClockSheepIfNeeded({ force: true });
+      }
 
       function ordinalDay(n) {
         var mod100 = n % 100;
@@ -2290,12 +2457,17 @@
         lastClockMinuteKey = key;
         renderClockTime(now);
         renderClockDate(now);
+        maybeRelayoutClockSheep(now);
       }
 
       function initClockPage() {
+        lastSheepHourKey = null;
+        clockSheepLaidOut = false;
+        clockSheepPendingLayout = false;
         rotateClockQuote();
         tickClockDisplay();
         loadClockWeather();
+        layoutClockSheepIfNeeded({ force: true });
 
         /** 每分钟局部刷新；对齐到下一整分后再固定 60s 间隔 */
         var msToNextMinute = 60000 - (Date.now() % 60000) + 50;
