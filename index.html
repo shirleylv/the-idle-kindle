@@ -503,7 +503,7 @@
       position: absolute;
       top: 50%;
       left: 0;
-      width: 33.333%;
+      width: 25%;
       height: 6px;
       background: #000000;
       margin-top: -3px;
@@ -1338,6 +1338,375 @@
         max-width: 40em;
       }
     }
+
+    /* —— Tab 4 今日待办 · 终极极简杂志风 —— */
+    #view-todo.view-main {
+      position: relative;
+      padding-top: clamp(16px, 3vh, 32px);
+      padding-bottom: 0;
+      overflow: hidden;
+    }
+
+    .todo-bg {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 0;
+      background-image: url('assets/clock/bg-meadow.png');
+      background-size: cover;
+      background-position: center 38%;
+      background-repeat: no-repeat;
+      opacity: 0.08;
+      pointer-events: none;
+      filter: grayscale(100%);
+    }
+
+    .todo-page {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .todo-masthead {
+      flex: 0 0 auto;
+      text-align: center;
+      padding: 0 0 clamp(12px, 2.5vh, 20px) 0;
+    }
+
+    .todo-header-sheep {
+      width: clamp(22px, 5vw, 28px);
+      height: clamp(22px, 5vw, 28px);
+      object-fit: contain;
+      display: inline-block;
+    }
+
+    .todo-composer {
+      flex: 0 0 auto;
+      margin-bottom: clamp(20px, 4vh, 36px);
+    }
+
+    .todo-input-row {
+      display: flex;
+      align-items: center;
+      border: 2px solid #000000;
+      background: #ffffff;
+      padding: 4px 12px;
+      box-shadow: 4px 4px 0px 0px #000000;
+    }
+
+    .todo-priority-pill {
+      flex: 0 0 auto;
+      padding: 6px 12px;
+      border: 2px solid #000000;
+      background: #000000;
+      color: #ffffff;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.88rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+
+    .todo-input-field {
+      flex: 1 1 0%;
+      min-width: 0;
+    }
+
+    .todo-input {
+      width: 100%;
+      height: 38px;
+      border: none;
+      background: transparent;
+      color: #000000;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+
+    .todo-input:focus {
+      outline: none;
+    }
+
+    .todo-input::placeholder {
+      color: #aaaaaa;
+    }
+
+    /* 专注刹车横幅：重塑为精致的折线轻量条 */
+    .todo-hint {
+      margin: 14px 0 0;
+      padding: 10px 14px;
+      border: 2px dashed #000000;
+      background: #fafafa;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      color: #000000;
+      font-style: italic;
+      text-align: center;
+    }
+
+    .todo-hint.is-hidden {
+      display: none;
+    }
+
+    .todo-editorial-grid {
+      flex: 1 1 0%;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .todo-col,
+    .daily-col {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .todo-col-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #000000;
+      margin-bottom: 16px;
+    }
+
+    .todo-col-title {
+      margin: 0;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1.05rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+    }
+
+    .todo-col-title-meta {
+      margin-left: 6px;
+      font-weight: 400;
+      color: #888888;
+    }
+
+    .todo-export-link {
+      border: none;
+      background: transparent;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      color: #888888;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .todo-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .todo-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px dashed #eee;
+    }
+
+    .todo-item:hover {
+      border-bottom-color: #000000;
+    }
+
+    .todo-check,
+    .daily-check {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      border: 2px solid #000000;
+      background: #ffffff;
+      cursor: pointer;
+      border-radius: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 12px;
+    }
+
+    /* 坚决移除任何外部图片依赖，未勾选留白，已勾选展示纯净黑勾 */
+    .todo-check.is-checked::after,
+    .daily-check.is-checked::after {
+      content: "✓";
+      color: #000000;
+    }
+
+    .todo-text {
+      flex: 1 1 0%;
+      min-width: 0;
+      word-break: break-word;
+      color: #000000;
+      font-weight: 500;
+    }
+
+    /* 优雅的签字笔划线效果：只划掉文字，绝不外溢横贯屏幕 */
+    .todo-item.is-done .todo-text {
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      text-decoration-color: #000000;
+      opacity: 0.45;
+    }
+
+    .todo-edit-ghost,
+    .todo-delete-ghost {
+      border: 1px solid #000000;
+      background: transparent;
+      padding: 2px 6px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.68rem;
+      font-weight: bold;
+      color: #000000;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .todo-delete-ghost {
+      text-transform: uppercase;
+    }
+
+    .todo-item:hover .todo-edit-ghost,
+    .todo-item:hover .todo-delete-ghost {
+      opacity: 1;
+    }
+
+    .todo-edit-row {
+      flex: 1 1 0%;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .todo-priority-pill--inline {
+      margin-right: 0;
+    }
+
+    .todo-edit-input {
+      flex: 1 1 0%;
+      min-width: 0;
+      border: none;
+      border-bottom: 2px solid #000000;
+      background: transparent;
+      color: #000000;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 4px 0;
+    }
+
+    .todo-edit-input:focus {
+      outline: none;
+    }
+
+    /* DONE 分类独立收纳区 */
+    .todo-done-zone {
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .todo-done-zone.is-hidden {
+      display: none;
+    }
+
+    .todo-done-label {
+      display: block;
+      width: 100%;
+      border: none;
+      background: transparent;
+      padding: 8px 0;
+      text-align: left;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.75rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      color: #aaaaaa;
+      cursor: pointer;
+    }
+
+    .todo-completed-list.is-hidden {
+      display: none;
+    }
+
+    .daily-self-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .daily-self-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    /* 右栏每日吾身治愈沉淀区：优雅洗牌 */
+    .daily-congrats {
+      margin-top: 28px;
+      padding: 16px;
+      border: 2px dashed #000000;
+      background: #faf8f5;
+      font-family: 'Courier New', Courier, monospace;
+      text-align: center;
+    }
+
+    .daily-congrats.is-hidden {
+      display: none;
+    }
+
+    .daily-congrats-icon-slot {
+      display: block;
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+
+    #daily-congrats-text {
+      font-size: 0.85rem;
+      font-weight: bold;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    /* 大屏响应式自适应：回归双栏网格 */
+    @media (min-width: 768px) {
+      .todo-editorial-grid {
+        flex-direction: row;
+        gap: 48px;
+      }
+      .todo-col {
+        flex: 1.1;
+      }
+      .daily-col {
+        flex: 0.9;
+        padding-left: 24px;
+        border-left: 2px solid #000000;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1478,7 +1847,66 @@
         </div>
       </main>
 
-      <!-- 2. 三段滑块：固定高度，紧贴 footer -->
+      <!-- Tab 4：今日待办 -->
+      <main id="view-todo" class="view-main is-hidden" aria-label="今日待办">
+        <div class="todo-bg" aria-hidden="true"></div>
+        <div class="todo-page">
+
+          <header class="todo-masthead">
+            <img class="todo-header-sheep" src="assets/clock/sheep.png" alt="Sheep" width="26" height="26" />
+          </header>
+
+          <div class="todo-composer">
+            <div class="todo-input-row">
+              <button type="button" class="todo-priority-pill" id="todo-priority-btn">P0</button>
+              <div class="todo-input-field">
+                <input type="text" class="todo-input" id="todo-input" placeholder="今天要做点什么呢？" autocomplete="off" enterkeyhint="done" />
+              </div>
+            </div>
+            <p class="todo-hint is-hidden" id="todo-hint" role="status" aria-live="polite"></p>
+          </div>
+
+          <div class="todo-editorial-grid">
+
+            <section class="todo-col" aria-label="待办列表">
+              <header class="todo-col-header">
+                <h2 class="todo-col-title">
+                  <span>TO DO</span>
+                  <span class="todo-col-title-meta" id="todo-title-progress">(0/0)</span>
+                </h2>
+                <button type="button" class="todo-export-link" id="todo-export-btn">Export</button>
+              </header>
+
+              <div class="todo-col-body">
+                <div class="todo-list" id="todo-active-list" aria-live="polite"></div>
+
+                <div class="todo-done-zone is-hidden" id="todo-completed-fold">
+                  <button type="button" class="todo-done-label" id="todo-completed-toggle" aria-expanded="true"></button>
+                  <div class="todo-list todo-completed-list" id="todo-completed-list"></div>
+                </div>
+              </div>
+            </section>
+
+            <section class="daily-col" aria-label="每日吾身">
+              <header class="todo-col-header">
+                <h2 class="todo-col-title">DAILY LOG</h2>
+              </header>
+
+              <div class="daily-col-body">
+                <div class="daily-self-list" id="daily-self-list"></div>
+
+                <div class="daily-congrats is-hidden" id="daily-congrats" aria-live="polite">
+                  <span class="daily-congrats-icon-slot" id="daily-congrats-icon-slot" aria-hidden="true">🌱</span>
+                  <span id="daily-congrats-text"></span>
+                </div>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </main>
+
+      <!-- 2. 四段滑块：固定高度，紧贴 footer -->
       <nav class="page-nav-wrap" aria-label="页面切换">
         <div class="page-nav" id="page-nav" role="tablist">
           <div class="page-nav-track" aria-hidden="true"></div>
@@ -1487,6 +1915,7 @@
             <button type="button" class="page-nav-zone" data-page="calendar" role="tab" aria-selected="true" aria-label="日历"></button>
             <button type="button" class="page-nav-zone" data-page="clock" role="tab" aria-selected="false" aria-label="时钟"></button>
             <button type="button" class="page-nav-zone" data-page="pomo" role="tab" aria-selected="false" aria-label="番茄钟"></button>
+            <button type="button" class="page-nav-zone" data-page="todo" role="tab" aria-selected="false" aria-label="待办"></button>
           </div>
         </div>
       </nav>
@@ -1542,6 +1971,8 @@
       var csvFallbackScene = FALLBACK_SCENE;
       var coverCatalog = null;
       var lastCoverDateKey = null;
+      var clockGeoSnapshot = null;
+      var CLOCK_GEO_KEY = 'clock_geo_last';
 
       function parseCSVLine(line) {
         var result = [];
@@ -1697,6 +2128,12 @@
           rotateCoverScene();
           renderCalendar(getAppDate());
           syncDailyWorkers(getAppDate());
+          if (typeof syncTodoDaily === 'function') {
+            syncTodoDaily(getAppDate());
+            renderTodoPage();
+            renderDailySelfList();
+            renderDailyCongrats();
+          }
           rotateClockQuote();
           renderClockDate(getAppDate());
         }, 60000);
@@ -1944,8 +2381,8 @@
         renderTodayWorkers(getTodayWorkers());
       }
 
-      /** 底部滑块切换：左=日历 / 中=时钟 / 右=番茄钟 */
-      var PAGES = ['calendar', 'clock', 'pomo'];
+      /** 底部滑块切换：日历 / 时钟 / 番茄钟 / 待办 */
+      var PAGES = ['calendar', 'clock', 'pomo', 'todo'];
 
       function getPageFromUrl() {
         try {
@@ -1989,6 +2426,7 @@
           calendar: document.getElementById('view-calendar'),
           clock: document.getElementById('view-clock'),
           pomo: document.getElementById('view-pomo'),
+          todo: document.getElementById('view-todo'),
         };
 
         PAGES.forEach(function (key) {
@@ -1996,7 +2434,7 @@
         });
 
         var thumb = document.getElementById('page-nav-thumb');
-        thumb.style.left = (index * 33.333) + '%';
+        thumb.style.left = (index * 25) + '%';
 
         var zones = document.querySelectorAll('.page-nav-zone');
         zones.forEach(function (zone) {
@@ -2442,6 +2880,15 @@
               var minT = mins && mins.length ? Math.round(mins[0]) : null;
               var maxT = maxs && maxs.length ? Math.round(maxs[0]) : null;
               var range = (minT != null && maxT != null) ? (minT + '~' + maxT + '°C') : '';
+              clockGeoSnapshot = {
+                city: geo.city || '',
+                lat: geo.lat,
+                lon: geo.lon,
+                capturedAt: todoNowIso(),
+              };
+              try {
+                localStorage.setItem(CLOCK_GEO_KEY, JSON.stringify(clockGeoSnapshot));
+              } catch (e) {}
               renderClockWeather(geo.city || '—', weatherCodeToEmoji(code), range);
             });
           })
@@ -2479,6 +2926,186 @@
 
       /** —— Tab 3 番茄上班钟 —— */
       var POMO_STORAGE_KEY = 'pomo_timer';
+      var POMO_HISTORY_KEY = 'pomo_history';
+
+      function loadPomoHistory() {
+        try {
+          return JSON.parse(localStorage.getItem(POMO_HISTORY_KEY) || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function savePomoHistory(history) {
+        localStorage.setItem(POMO_HISTORY_KEY, JSON.stringify(history));
+      }
+
+      function startPomoHistorySession(state) {
+        var id = 'pomo-' + Date.now() + '-' + Math.floor(Math.random() * 10000);
+        var now = todoNowIso();
+        var session = {
+          id: id,
+          date: dateKey(getAppDate()),
+          tier: state.tier,
+          startedAt: now,
+          focusStartedAt: now,
+          focusEndedAt: null,
+          breakStartedAt: null,
+          breakEndedAt: null,
+          endedAt: null,
+          focusPlannedMs: tierFocusMs(state.tier),
+          breakPlannedMs: tierBreakMs(state.tier),
+          focusDurationMs: 0,
+          breakDurationMs: 0,
+          focusCompleted: false,
+          completed: false,
+          status: 'in_progress',
+        };
+        var history = loadPomoHistory();
+        history.push(session);
+        savePomoHistory(history);
+        state.sessionId = id;
+      }
+
+      function markPomoFocusCompleted(state) {
+        if (!state.sessionId) return;
+        var history = loadPomoHistory();
+        var session = null;
+        history.forEach(function (entry) {
+          if (entry.id === state.sessionId) session = entry;
+        });
+        if (!session || session.focusCompleted) return;
+        var now = todoNowIso();
+        session.focusCompleted = true;
+        session.focusDurationMs = tierFocusMs(state.tier);
+        session.focusEndedAt = now;
+        session.breakStartedAt = now;
+        savePomoHistory(history);
+      }
+
+      function finalizePomoHistorySession(state, outcome) {
+        if (!state.sessionId) return;
+        var history = loadPomoHistory();
+        var session = null;
+        history.forEach(function (entry) {
+          if (entry.id === state.sessionId) session = entry;
+        });
+        if (!session) {
+          state.sessionId = null;
+          return;
+        }
+
+        var now = todoNowIso();
+        if (state.phase === 'focus' && !session.focusCompleted) {
+          syncPomoRemaining(state);
+          session.focusDurationMs = Math.max(0, tierFocusMs(state.tier) - state.remainingMs);
+          session.focusEndedAt = now;
+        }
+        if (state.phase === 'break') {
+          if (!session.focusCompleted) {
+            session.focusCompleted = true;
+            session.focusDurationMs = tierFocusMs(state.tier);
+            session.focusEndedAt = session.focusEndedAt || now;
+            session.breakStartedAt = session.breakStartedAt || now;
+          }
+          syncPomoRemaining(state);
+          session.breakDurationMs = Math.max(0, tierBreakMs(state.tier) - state.remainingMs);
+          session.breakEndedAt = now;
+        }
+        if (outcome === 'completed') {
+          session.focusCompleted = true;
+          session.focusDurationMs = tierFocusMs(session.tier);
+          session.breakDurationMs = tierBreakMs(session.tier);
+          session.focusEndedAt = session.focusEndedAt || now;
+          session.breakStartedAt = session.breakStartedAt || session.focusEndedAt || now;
+          session.breakEndedAt = now;
+          session.completed = true;
+          session.status = 'completed';
+        } else {
+          session.completed = false;
+          session.status = 'incomplete';
+        }
+        session.endedAt = now;
+        savePomoHistory(history);
+        state.sessionId = null;
+      }
+
+      function snapshotPomoSession(session, state) {
+        var copy = JSON.parse(JSON.stringify(session));
+        if (!state || state.sessionId !== session.id || session.status !== 'in_progress') {
+          return copy;
+        }
+        if (state.phase === 'focus') {
+          var focusRemaining = getPomoRemainingMs(state);
+          copy.focusDurationMs = Math.max(0, tierFocusMs(state.tier) - focusRemaining);
+          copy.focusCompleted = focusRemaining <= 0;
+        } else if (state.phase === 'break') {
+          copy.focusCompleted = true;
+          copy.focusDurationMs = tierFocusMs(state.tier);
+          var breakRemaining = getPomoRemainingMs(state);
+          copy.breakDurationMs = Math.max(0, tierBreakMs(state.tier) - breakRemaining);
+        }
+        return copy;
+      }
+
+      function buildPomoExportData() {
+        var history = loadPomoHistory();
+        var sessions = history.map(function (session) {
+          if (pomoState && pomoState.sessionId === session.id && session.status === 'in_progress') {
+            return snapshotPomoSession(session, pomoState);
+          }
+          return JSON.parse(JSON.stringify(session));
+        });
+
+        var dailyMap = {};
+        sessions.forEach(function (session) {
+          var day = session.date;
+          if (!dailyMap[day]) {
+            dailyMap[day] = {
+              date: day,
+              count: 0,
+              completedCount: 0,
+              incompleteCount: 0,
+              inProgressCount: 0,
+              totalFocusMs: 0,
+              totalBreakMs: 0,
+              sessions: [],
+            };
+          }
+          var bucket = dailyMap[day];
+          bucket.count += 1;
+          bucket.totalFocusMs += session.focusDurationMs || 0;
+          bucket.totalBreakMs += session.breakDurationMs || 0;
+          if (session.status === 'completed') bucket.completedCount += 1;
+          else if (session.status === 'in_progress') bucket.inProgressCount += 1;
+          else bucket.incompleteCount += 1;
+          bucket.sessions.push(session);
+        });
+
+        var completedCount = 0;
+        var incompleteCount = 0;
+        var totalFocusMs = 0;
+        var totalBreakMs = 0;
+        sessions.forEach(function (session) {
+          totalFocusMs += session.focusDurationMs || 0;
+          totalBreakMs += session.breakDurationMs || 0;
+          if (session.status === 'completed') completedCount += 1;
+          else if (session.status !== 'in_progress') incompleteCount += 1;
+        });
+
+        return {
+          sessions: sessions,
+          summary: {
+            totalCount: sessions.length,
+            completedCount: completedCount,
+            incompleteCount: incompleteCount,
+            inProgressCount: sessions.filter(function (s) { return s.status === 'in_progress'; }).length,
+            totalFocusMs: totalFocusMs,
+            totalBreakMs: totalBreakMs,
+          },
+          dailySummary: Object.keys(dailyMap).sort().map(function (key) { return dailyMap[key]; }),
+        };
+      }
 
       var POMO_TIERS = {
         tall: { focusMin: 25, breakMin: 5, boxSize: 'small', label: 'Tall' },
@@ -2495,6 +3122,49 @@
 
       var pomoState = null;
       var pomoTickTimer = null;
+      var pomoAudioUnlocked = false;
+
+      var POMO_SOUNDS = {
+        focusDone: 'assets/pomo/focus-done.mp3',
+        breakDone: 'assets/pomo/break-done.mp3',
+      };
+
+      var pomoAudioCache = {};
+
+      function getPomoAudio(key) {
+        if (!pomoAudioCache[key]) {
+          var audio = new Audio(POMO_SOUNDS[key]);
+          audio.preload = 'auto';
+          audio.volume = 0.55;
+          pomoAudioCache[key] = audio;
+        }
+        return pomoAudioCache[key];
+      }
+
+      function unlockPomoAudio() {
+        if (pomoAudioUnlocked) return;
+        pomoAudioUnlocked = true;
+        Object.keys(POMO_SOUNDS).forEach(function (key) {
+          var audio = getPomoAudio(key);
+          var playPromise = audio.play();
+          if (playPromise && playPromise.then) {
+            playPromise.then(function () {
+              audio.pause();
+              audio.currentTime = 0;
+            }).catch(function () {});
+          }
+        });
+      }
+
+      function playPomoSound(key) {
+        if (!POMO_SOUNDS[key]) return;
+        var audio = getPomoAudio(key);
+        audio.currentTime = 0;
+        var playPromise = audio.play();
+        if (playPromise && playPromise.catch) {
+          playPromise.catch(function () {});
+        }
+      }
 
       function defaultPomoState() {
         return {
@@ -2504,6 +3174,7 @@
           running: false,
           statusMessage: '',
           updatedAt: Date.now(),
+          sessionId: null,
         };
       }
 
@@ -2702,6 +3373,7 @@
 
       function startPomoFocus(state) {
         if (!state.tier) return;
+        startPomoHistorySession(state);
         state.phase = 'focus';
         state.remainingMs = tierFocusMs(state.tier);
         state.running = true;
@@ -2719,13 +3391,17 @@
 
       function handlePomoPhaseComplete(state) {
         if (state.phase === 'focus') {
+          markPomoFocusCompleted(state);
+          playPomoSound('focusDone');
           startPomoBreak(state);
           commitPomoState(state);
           return;
         }
 
         if (state.phase === 'break') {
+          playPomoSound('breakDone');
           var completedTier = state.tier;
+          finalizePomoHistorySession(state, 'completed');
           grantPomoWorker(completedTier);
           enterPomoDone(state);
           commitPomoState(state);
@@ -2754,6 +3430,7 @@
       }
 
       function onPomoStart() {
+        unlockPomoAudio();
         syncPomoRemaining(pomoState);
 
         if (pomoState.phase === 'idle' || pomoState.phase === 'done') {
@@ -2793,6 +3470,7 @@
 
       function onPomoReselect() {
         if (!pomoIsActivePhase(pomoState.phase)) return;
+        finalizePomoHistorySession(pomoState, 'incomplete');
         enterPomoIdle(pomoState, { tier: 'tall' });
         commitPomoState(pomoState);
       }
@@ -2831,6 +3509,7 @@
           didTransition = true;
 
           if (state.phase === 'focus') {
+            markPomoFocusCompleted(state);
             state.phase = 'break';
             state.remainingMs = tierBreakMs(state.tier);
             setPomoStatus('break', state);
@@ -2840,6 +3519,7 @@
           }
 
           if (state.phase === 'break') {
+            finalizePomoHistorySession(state, 'completed');
             grantPomoWorker(state.tier);
             enterPomoDone(state);
             break;
@@ -2852,6 +3532,10 @@
       }
 
       function initPomoPage() {
+        Object.keys(POMO_SOUNDS).forEach(function (key) {
+          getPomoAudio(key);
+        });
+
         pomoState = loadPomoState();
         pomoState = reconcilePomoState(pomoState);
 
@@ -2896,7 +3580,817 @@
         });
       }
 
+      /** —— Tab 4 今日待办 · 干净逻辑数据引擎 —— */
+      var TODO_PRIORITIES = ['P0', 'P1', 'P2'];
+      var TODO_MAX_OPEN = 10;
+      var TODO_MAX_VISIBLE = 5;
+
+      // 统一收归的产品Tips提示语（专注刹车拦截）
+      var TODO_OVERLOAD_HINT = '“贪多必失。请在此处留白，把精力留给尚未完成的五件事。”';
+      var TODO_MAX_OPEN_HINT = '系统不支持超载专注。不要用清单的长度，去伪装行动的厚度。';
+      var TODO_TASK_DONE_SOUND = 'assets/todo/task-done.mp3';
+
+      var todoTaskDoneAudio = null;
+
+      var DAILY_SELF_ITEMS = [
+        { key: 'sleep', label: '昨晚睡了个好觉' },
+        { key: 'meal', label: '今天有好好吃饭' },
+        { key: 'water', label: '喝了超多的水' },
+        { key: 'exercise', label: '今天还做了运动' }
+      ];
+
+      // 重新对齐的、富有晚安及收尾温度的清爽梯度夸奖文案
+      var DAILY_CONGRATS = {
+        1: [
+          '爱你老己！就凭这一项，今天你就没有白过。',
+          '启动成功！身体的健康指数正在稳步上升。',
+          '第一枚勋章已到账，今天也是个不错的开始。'
+        ],
+        2: [
+          '状态不错！稍微分一点精力给自己，身体就会开出一朵小花。',
+          '渐入佳境，你今天正在以极佳的节奏向前推进。',
+          '指标过半！感觉今天走起路来都带风了。'
+        ],
+        3: [
+          '今天是个好日子，因为你把 75% 的爱都留给了自己。',
+          '高光时刻！今天你的生命力指数有点超标了。',
+          '三项全能！这套组合拳打得非常漂亮，状态绝了。'
+        ],
+        4: [
+          '四项全满！今天的健康进度条已彻底走完，可以心安理得地对今天说再见了。',
+          '大圆满！今天对自己的照顾无懈可击，今晚可以做个无比踏实的好梦了。',
+          '百分之百的完整一天。卸下所有行李，去享受属于你的纯净夜晚吧。'
+        ]
+      };
+
+      var todoState = {
+        items: [],
+        events: [],
+        ui: { completedCollapsed: false, hiddenExpanded: false, coverHint: '' },
+        dailySelf: { date: null, sleep: false, meal: false, water: false, exercise: false },
+        dailySelfHistory: {},
+        editingId: null,
+        inputPriority: 'P0',
+        lastCongratsCount: 0,
+        lastCongratsText: ''
+      };
+
+      function todoNowIso() { return new Date().toISOString(); }
+
+      function getTodoTaskDoneAudio() {
+        if (!todoTaskDoneAudio) {
+          todoTaskDoneAudio = new Audio(TODO_TASK_DONE_SOUND);
+          todoTaskDoneAudio.preload = 'auto';
+          todoTaskDoneAudio.volume = 0.55;
+        }
+        return todoTaskDoneAudio;
+      }
+
+      function playTodoTaskDoneSound() {
+        var audio = getTodoTaskDoneAudio();
+        audio.currentTime = 0;
+        var playPromise = audio.play();
+        if (playPromise && playPromise.catch) {
+          playPromise.catch(function () {});
+        }
+      }
+
+      function todoPriorityRank(priority) { return TODO_PRIORITIES.indexOf(priority); }
+      function cycleTodoPriority(priority) {
+        var idx = TODO_PRIORITIES.indexOf(priority);
+        return TODO_PRIORITIES[(idx + 1) % TODO_PRIORITIES.length];
+      }
+      function pickRandomLine(list) { return list[Math.floor(Math.random() * list.length)]; }
+
+      function loadTodoItems() {
+        try { return JSON.parse(localStorage.getItem('todo_items') || '[]'); } catch (e) { return []; }
+      }
+      function saveTodoItems(items) { localStorage.setItem('todo_items', JSON.stringify(items)); }
+
+      function loadTodoEvents() {
+        try { return JSON.parse(localStorage.getItem('todo_events') || '[]'); } catch (e) { return []; }
+      }
+      function saveTodoEvents(events) { localStorage.setItem('todo_events', JSON.stringify(events)); }
+
+      function loadTodoUi() {
+        try {
+          return JSON.parse(localStorage.getItem('todo_ui') || 'null') || { completedCollapsed: false };
+        } catch (e) {
+          return { completedCollapsed: false };
+        }
+      }
+      function saveTodoUi(ui) { localStorage.setItem('todo_ui', JSON.stringify(ui)); }
+
+      function loadDailySelfHistory() {
+        try { return JSON.parse(localStorage.getItem('daily_self_history') || '{}'); } catch (e) { return {}; }
+      }
+      function saveDailySelfHistory(history) { localStorage.setItem('daily_self_history', JSON.stringify(history)); }
+
+      function appendTodoEvent(event) {
+        todoState.events.push(event);
+        saveTodoEvents(todoState.events);
+      }
+
+      function sortTodoOpenItems(items) {
+        return items.slice().sort(function (a, b) {
+          var rankDiff = todoPriorityRank(a.priority) - todoPriorityRank(b.priority);
+          if (rankDiff !== 0) return rankDiff;
+          return String(a.createdAt).localeCompare(String(b.createdAt));
+        });
+      }
+
+      function setTodoHint(text, visible) {
+        var hint = document.getElementById('todo-hint');
+        if (!hint) return;
+        if (!visible || !text) {
+          hint.classList.add('is-hidden');
+          hint.textContent = '';
+          return;
+        }
+        hint.textContent = text;
+        hint.classList.remove('is-hidden');
+      }
+
+      function archiveDailySelfForDate(dateStr) {
+        if (!dateStr || !todoState.dailySelf || todoState.dailySelf.date !== dateStr) return;
+        todoState.dailySelfHistory[dateStr] = {
+          sleep: !!todoState.dailySelf.sleep,
+          meal: !!todoState.dailySelf.meal,
+          water: !!todoState.dailySelf.water,
+          exercise: !!todoState.dailySelf.exercise,
+        };
+        saveDailySelfHistory(todoState.dailySelfHistory);
+      }
+
+      function resetDailySelfForToday(todayKey) {
+        todoState.dailySelf = {
+          date: todayKey,
+          sleep: false,
+          meal: false,
+          water: false,
+          exercise: false,
+        };
+        localStorage.setItem('daily_self_today', JSON.stringify(todoState.dailySelf));
+      }
+
+      function syncTodoDaily(date) {
+        var todayKey = dateKey(date);
+        var storedDate = localStorage.getItem('todo_date');
+
+        if (storedDate && storedDate !== todayKey) {
+          archiveDailySelfForDate(storedDate);
+          todoState.items = todoState.items.filter(function (item) { return !item.done; });
+          saveTodoItems(todoState.items);
+          resetDailySelfForToday(todayKey);
+        }
+
+        if (!storedDate || storedDate !== todayKey) {
+          localStorage.setItem('todo_date', todayKey);
+        }
+
+        if (!todoState.dailySelf.date || todoState.dailySelf.date !== todayKey) {
+          resetDailySelfForToday(todayKey);
+        }
+      }
+
+      function buildTodoDailySummary(events) {
+        events = events.slice().sort(function (a, b) {
+          return String(a.at).localeCompare(String(b.at));
+        });
+
+        var datesSet = {};
+        events.forEach(function (ev) {
+          if (ev.at) datesSet[String(ev.at).slice(0, 10)] = true;
+        });
+        datesSet[dateKey(getAppDate())] = true;
+
+        return Object.keys(datesSet).sort().map(function (d) {
+          var endOfDay = d + 'T23:59:59.999';
+          var items = {};
+          var created = [];
+          var completed = [];
+          var deleted = [];
+
+          events.forEach(function (ev) {
+            if (!ev.at || ev.at > endOfDay) return;
+            var day = String(ev.at).slice(0, 10);
+
+            if (ev.type === 'created') {
+              items[ev.id] = { text: ev.text, priority: ev.priority, done: false, createdAt: ev.at, deleted: false };
+              if (day === d) created.push({ id: ev.id, text: ev.text, priority: ev.priority, at: ev.at });
+            } else if (ev.type === 'completed' && items[ev.id]) {
+              items[ev.id].done = true;
+              if (day === d) completed.push({ id: ev.id, text: items[ev.id].text, at: ev.at });
+            } else if (ev.type === 'edited' && items[ev.id]) {
+              items[ev.id].text = ev.text;
+              if (ev.priority) items[ev.id].priority = ev.priority;
+            } else if (ev.type === 'uncompleted' && items[ev.id]) {
+              items[ev.id].done = false;
+            } else if (ev.type === 'deleted') {
+              if (items[ev.id] && day === d) {
+                deleted.push({
+                  id: ev.id,
+                  text: ev.text || items[ev.id].text,
+                  priority: ev.priority || items[ev.id].priority,
+                  createdAt: ev.createdAt || items[ev.id].createdAt,
+                  at: ev.at,
+                });
+              }
+              if (items[ev.id]) items[ev.id].deleted = true;
+            }
+          });
+
+          var stillOpen = [];
+          Object.keys(items).forEach(function (id) {
+            var entry = items[id];
+            if (!entry.deleted && !entry.done) {
+              stillOpen.push({ id: id, text: entry.text, priority: entry.priority, createdAt: entry.createdAt });
+            }
+          });
+
+          return { date: d, created: created, completed: completed, stillOpen: stillOpen, deleted: deleted };
+        });
+      }
+
+      function getDailySelfHistoryArray() {
+        var history = todoState.dailySelfHistory;
+        var todayKey = dateKey(getAppDate());
+        var merged = {};
+
+        Object.keys(history).forEach(function (key) { merged[key] = history[key]; });
+        merged[todayKey] = {
+          sleep: !!todoState.dailySelf.sleep,
+          meal: !!todoState.dailySelf.meal,
+          water: !!todoState.dailySelf.water,
+          exercise: !!todoState.dailySelf.exercise,
+        };
+
+        return Object.keys(merged).sort().map(function (key) {
+          var row = merged[key];
+          return {
+            date: key,
+            sleep: !!row.sleep,
+            meal: !!row.meal,
+            water: !!row.water,
+            exercise: !!row.exercise,
+          };
+        });
+      }
+
+      function exportTodoData() {
+        var payload = {
+          exportedAt: todoNowIso(),
+          app: 'The Idle Kindle',
+          version: '2',
+          location: buildLocationExportData(),
+          pomodoro: buildPomoExportData(),
+          workClock: buildWorkClockExportData(),
+          dailySelf: getDailySelfHistoryArray(),
+          todos: {
+            events: todoState.events.slice(),
+            dailySummary: buildTodoDailySummary(todoState.events),
+          },
+        };
+
+        var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'idle-kindle-export-' + dateKey(getAppDate()) + '.json';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function loadClockGeoSnapshot() {
+        if (clockGeoSnapshot) return clockGeoSnapshot;
+        try {
+          var raw = localStorage.getItem(CLOCK_GEO_KEY);
+          if (!raw) return null;
+          return JSON.parse(raw);
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function buildLocationExportData() {
+        var geo = loadClockGeoSnapshot();
+        return {
+          calendar: {
+            name: activeScene.name || '',
+            coords: activeScene.coords || '',
+            coverDate: lastCoverDateKey,
+          },
+          clock: geo ? {
+            city: geo.city || '',
+            lat: geo.lat,
+            lon: geo.lon,
+            capturedAt: geo.capturedAt || null,
+          } : null,
+          device: {
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || '',
+            locale: navigator.language || '',
+          },
+        };
+      }
+
+      function dailySelfCheckedCount() {
+        var count = 0;
+        DAILY_SELF_ITEMS.forEach(function (item) {
+          if (todoState.dailySelf[item.key]) count++;
+        });
+        return count;
+      }
+
+      // 核心渲染逻辑：将祝贺百分之百锁定在右栏「每日吾身」打卡区！
+      function renderDailyCongrats() {
+        var wrap = document.getElementById('daily-congrats');
+        var textEl = document.getElementById('daily-congrats-text');
+        var iconEl = document.getElementById('daily-congrats-icon-slot');
+        var count = dailySelfCheckedCount();
+
+        if (!count) {
+          wrap.classList.add('is-hidden');
+          textEl.textContent = '';
+          if (iconEl) iconEl.textContent = '🌱';
+          todoState.lastCongratsCount = 0;
+          todoState.lastCongratsText = '';
+          return;
+        }
+
+        var pool = DAILY_CONGRATS[count];
+        if (count !== todoState.lastCongratsCount) {
+          todoState.lastCongratsCount = count;
+          todoState.lastCongratsText = pickRandomLine(pool);
+        }
+
+        wrap.classList.remove('is-hidden');
+        textEl.textContent = "“" + todoState.lastCongratsText + "”";
+
+        // 纯净映射打卡数量的 Emoji，后续如需精致 SVG 图标请提示我索要
+        var icons = { 1: "❤️", 2: "🌟", 3: "🚀", 4: "👑" };
+        if (iconEl) iconEl.textContent = icons[count] || "🌱";
+      }
+
+      function renderDailySelfList() {
+        var list = document.getElementById('daily-self-list');
+        if (!list) return;
+        list.innerHTML = '';
+
+        DAILY_SELF_ITEMS.forEach(function (item) {
+          var row = document.createElement('div');
+          row.className = 'daily-self-item';
+
+          var check = document.createElement('button');
+          check.type = 'button';
+          check.className = 'daily-check' + (todoState.dailySelf[item.key] ? ' is-checked' : '');
+
+          var label = document.createElement('span');
+          label.textContent = item.label;
+
+          function toggleDailySelf() {
+            var wasChecked = !!todoState.dailySelf[item.key];
+            todoState.dailySelf[item.key] = !wasChecked;
+            if (!wasChecked && todoState.dailySelf[item.key]) playTodoTaskDoneSound();
+            saveTodoItems(todoState.items);
+            localStorage.setItem('daily_self_today', JSON.stringify(todoState.dailySelf));
+            renderDailySelfList();
+            renderDailyCongrats();
+          }
+
+          check.addEventListener('click', function (e) {
+            e.stopPropagation();
+            toggleDailySelf();
+          });
+          row.addEventListener('click', toggleDailySelf);
+
+          row.appendChild(check);
+          row.appendChild(label);
+          list.appendChild(row);
+        });
+      }
+
+      function startTodoEdit(id) {
+        todoState.editingId = id;
+        renderTodoPage();
+      }
+
+      function cancelTodoEdit() {
+        todoState.editingId = null;
+        renderTodoPage();
+      }
+
+      function commitTodoEdit(id, newText, newPriority) {
+        newText = String(newText || '').trim();
+        if (!newText) {
+          cancelTodoEdit();
+          return;
+        }
+
+        todoState.items.forEach(function (item) {
+          if (item.id !== id) return;
+
+          var prevText = item.text;
+          var prevPriority = item.priority;
+          if (newText === prevText && newPriority === prevPriority) return;
+
+          item.text = newText;
+          item.priority = newPriority;
+          appendTodoEvent({
+            type: 'edited',
+            id: id,
+            text: newText,
+            priority: newPriority,
+            previousText: prevText,
+            previousPriority: prevPriority,
+            at: todoNowIso(),
+          });
+        });
+
+        todoState.editingId = null;
+        saveTodoItems(todoState.items);
+        renderTodoPage();
+      }
+
+      function renderTodoItemRow(item) {
+        var row = document.createElement('div');
+        var isEditing = todoState.editingId === item.id;
+        row.className = 'todo-item' + (item.done ? ' is-done' : '') + (isEditing ? ' is-editing' : '');
+
+        var checkBtn = document.createElement('button');
+        checkBtn.type = 'button';
+        checkBtn.className = 'todo-check' + (item.done ? ' is-checked' : '');
+        checkBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (isEditing) return;
+          toggleTodoDone(item.id);
+        });
+
+        row.appendChild(checkBtn);
+
+        if (isEditing) {
+          var draftPriority = item.priority;
+          var editRow = document.createElement('div');
+          editRow.className = 'todo-edit-row';
+
+          var priBtn = document.createElement('button');
+          priBtn.type = 'button';
+          priBtn.className = 'todo-priority-pill todo-priority-pill--inline';
+          priBtn.textContent = draftPriority;
+          priBtn.setAttribute('aria-label', '切换优先级');
+          priBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            draftPriority = cycleTodoPriority(draftPriority);
+            priBtn.textContent = draftPriority;
+          });
+
+          var input = document.createElement('input');
+          input.type = 'text';
+          input.className = 'todo-edit-input';
+          input.value = item.text;
+          input.setAttribute('aria-label', '编辑任务');
+          input.autocomplete = 'off';
+
+          function submitEdit() {
+            commitTodoEdit(item.id, input.value, draftPriority);
+          }
+
+          input.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+              e.preventDefault();
+              cancelTodoEdit();
+            }
+          });
+
+          var saveBtn = document.createElement('button');
+          saveBtn.type = 'button';
+          saveBtn.className = 'todo-edit-ghost';
+          saveBtn.textContent = 'Done';
+          saveBtn.setAttribute('aria-label', '保存编辑');
+          saveBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            submitEdit();
+          });
+
+          editRow.appendChild(priBtn);
+          editRow.appendChild(input);
+          editRow.appendChild(saveBtn);
+          row.appendChild(editRow);
+
+          setTimeout(function () {
+            input.focus();
+            input.select();
+          }, 0);
+        } else {
+          var text = document.createElement('span');
+          text.className = 'todo-text';
+          text.textContent = item.priority + ' ' + item.text;
+
+          var editBtn = document.createElement('button');
+          editBtn.type = 'button';
+          editBtn.className = 'todo-edit-ghost';
+          editBtn.textContent = 'Edit';
+          editBtn.setAttribute('aria-label', '编辑任务');
+          editBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            startTodoEdit(item.id);
+          });
+
+          var delBtn = document.createElement('button');
+          delBtn.type = 'button';
+          delBtn.className = 'todo-delete-ghost';
+          delBtn.textContent = 'Delete';
+          delBtn.setAttribute('aria-label', '删除任务');
+          delBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            deleteTodoItem(item.id);
+          });
+
+          row.appendChild(text);
+          row.appendChild(editBtn);
+          row.appendChild(delBtn);
+        }
+
+        return row;
+      }
+
+      function renderTodoPage() {
+        var open = [];
+        var done = [];
+        todoState.items.forEach(function (item) {
+          if (item.done) done.push(item);
+          else open.push(item);
+        });
+        open = sortTodoOpenItems(open);
+
+        var openCount = open.length;
+        var totalCount = todoState.items.length;
+        var completedCount = done.length;
+
+        document.getElementById('todo-title-progress').textContent = '(' + completedCount + '/' + totalCount + ')';
+
+        if (openCount >= TODO_MAX_OPEN) {
+          setTodoHint(TODO_MAX_OPEN_HINT, true);
+        } else if (openCount >= TODO_MAX_VISIBLE) {
+          setTodoHint(TODO_OVERLOAD_HINT, true);
+        } else {
+          setTodoHint('', false);
+        }
+
+        var activeList = document.getElementById('todo-active-list');
+        activeList.innerHTML = '';
+        open.forEach(function (item) {
+          activeList.appendChild(renderTodoItemRow(item));
+        });
+
+        var completedFold = document.getElementById('todo-completed-fold');
+        var completedToggle = document.getElementById('todo-completed-toggle');
+        var completedList = document.getElementById('todo-completed-list');
+
+        if (!completedCount) {
+          completedFold.classList.add('is-hidden');
+        } else {
+          completedFold.classList.remove('is-hidden');
+          completedToggle.textContent = '— DONE (' + completedCount + ') —';
+          completedToggle.setAttribute('aria-expanded', todoState.ui.completedCollapsed ? 'false' : 'true');
+
+          if (todoState.ui.completedCollapsed) {
+            completedList.classList.add('is-hidden');
+            completedList.innerHTML = '';
+          } else {
+            completedList.classList.remove('is-hidden');
+            completedList.innerHTML = '';
+            done.forEach(function (item) {
+              completedList.appendChild(renderTodoItemRow(item));
+            });
+          }
+        }
+      }
+
+      function toggleTodoDone(id) {
+        var justCompleted = false;
+        todoState.items.forEach(function (item) {
+          if (item.id === id) {
+            var wasDone = item.done;
+            item.done = !item.done;
+            if (!wasDone && item.done) justCompleted = true;
+            appendTodoEvent({
+              type: item.done ? 'completed' : 'uncompleted',
+              id: id,
+              at: todoNowIso(),
+            });
+          }
+        });
+        if (justCompleted) playTodoTaskDoneSound();
+        saveTodoItems(todoState.items);
+        renderTodoPage();
+      }
+
+      function deleteTodoItem(id) {
+        if (todoState.editingId === id) todoState.editingId = null;
+        var target = null;
+        todoState.items.forEach(function (item) {
+          if (item.id === id) target = item;
+        });
+        if (target) {
+          appendTodoEvent({
+            type: 'deleted',
+            id: id,
+            text: target.text,
+            priority: target.priority,
+            createdAt: target.createdAt,
+            at: todoNowIso(),
+          });
+        }
+        todoState.items = todoState.items.filter(function (entry) { return entry.id !== id; });
+        saveTodoItems(todoState.items);
+        renderTodoPage();
+      }
+
+      // 初始化挂载入口
+      function initTodoPage() {
+        getTodoTaskDoneAudio();
+
+        todoState.items = loadTodoItems();
+        todoState.events = loadTodoEvents();
+        todoState.ui = loadTodoUi();
+        todoState.dailySelfHistory = loadDailySelfHistory();
+        try { todoState.dailySelf = JSON.parse(localStorage.getItem('daily_self_today')) || todoState.dailySelf; } catch (e) {}
+
+        syncTodoDaily(getAppDate());
+
+        renderTodoPage();
+        renderDailySelfList();
+        renderDailyCongrats();
+
+        var inputEl = document.getElementById('todo-input');
+        if (inputEl) {
+          inputEl.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+              var val = inputEl.value.trim();
+              if (!val) return;
+              var openCount = todoState.items.filter(function (i) { return !i.done; }).length;
+              if (openCount >= TODO_MAX_OPEN) {
+                setTodoHint(TODO_MAX_OPEN_HINT, true);
+                return;
+              }
+              var id = 'todo-' + Date.now() + '-' + Math.floor(Math.random() * 10000);
+              var createdAt = todoNowIso();
+              todoState.items.push({
+                id: id,
+                text: val,
+                priority: todoState.inputPriority,
+                done: false,
+                createdAt: createdAt,
+              });
+              appendTodoEvent({
+                type: 'created',
+                id: id,
+                text: val,
+                priority: todoState.inputPriority,
+                at: createdAt,
+              });
+              saveTodoItems(todoState.items);
+              inputEl.value = '';
+              renderTodoPage();
+            }
+          });
+        }
+
+        var priorityBtn = document.getElementById('todo-priority-btn');
+        if (priorityBtn) {
+          priorityBtn.textContent = todoState.inputPriority;
+          priorityBtn.addEventListener('click', function () {
+            todoState.inputPriority = cycleTodoPriority(todoState.inputPriority);
+            priorityBtn.textContent = todoState.inputPriority;
+          });
+        }
+
+        var completedToggle = document.getElementById('todo-completed-toggle');
+        if (completedToggle) {
+          completedToggle.addEventListener('click', function () {
+            todoState.ui.completedCollapsed = !todoState.ui.completedCollapsed;
+            saveTodoUi(todoState.ui);
+            renderTodoPage();
+          });
+        }
+
+        var exportBtn = document.getElementById('todo-export-btn');
+        if (exportBtn) {
+          exportBtn.addEventListener('click', exportTodoData);
+        }
+      }
+
+
       var WORK_CLOCK_KEY = 'work_clock';
+      var WORK_CLOCK_HISTORY_KEY = 'work_clock_history';
+
+      function loadWorkClockHistory() {
+        try {
+          return JSON.parse(localStorage.getItem(WORK_CLOCK_HISTORY_KEY) || '[]');
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function saveWorkClockHistory(history) {
+        localStorage.setItem(WORK_CLOCK_HISTORY_KEY, JSON.stringify(history));
+      }
+
+      function appendWorkClockSession(dateKeyStr, clockInAt) {
+        var history = loadWorkClockHistory();
+        history.push({
+          date: dateKeyStr,
+          clockInAt: clockInAt,
+          clockOutAt: null,
+          durationMs: null,
+        });
+        saveWorkClockHistory(history);
+      }
+
+      function closeWorkClockSession(dateKeyStr, clockOutAt, durationMs) {
+        var history = loadWorkClockHistory();
+        for (var i = history.length - 1; i >= 0; i--) {
+          if (history[i].date === dateKeyStr && !history[i].clockOutAt) {
+            history[i].clockOutAt = clockOutAt;
+            history[i].durationMs = durationMs;
+            break;
+          }
+        }
+        saveWorkClockHistory(history);
+      }
+
+      function buildWorkClockExportData() {
+        var history = loadWorkClockHistory().slice();
+        var state = loadWorkClock();
+        var todayKey = dateKey(getAppDate());
+
+        if (state.status === 'working' && state.sessionStart && state.date === todayKey) {
+          var openFound = false;
+          history.forEach(function (entry) {
+            if (entry.date === todayKey && !entry.clockOutAt) {
+              openFound = true;
+              entry.durationMs = Math.max(0, Date.now() - state.sessionStart);
+            }
+          });
+          if (!openFound) {
+            history.push({
+              date: todayKey,
+              clockInAt: new Date(state.sessionStart).toISOString(),
+              clockOutAt: null,
+              durationMs: Math.max(0, Date.now() - state.sessionStart),
+            });
+          }
+        }
+
+        var dailyMap = {};
+        history.forEach(function (entry) {
+          if (!dailyMap[entry.date]) {
+            dailyMap[entry.date] = {
+              date: entry.date,
+              punchCount: 0,
+              totalDurationMs: 0,
+              sessions: [],
+            };
+          }
+          var bucket = dailyMap[entry.date];
+          bucket.punchCount += 1;
+          bucket.totalDurationMs += entry.durationMs || 0;
+          bucket.sessions.push(entry);
+        });
+
+        var todayBucket = dailyMap[todayKey] || {
+          date: todayKey,
+          punchCount: 0,
+          totalDurationMs: 0,
+          sessions: [],
+        };
+
+        var openSession = null;
+        todayBucket.sessions.forEach(function (entry) {
+          if (!entry.clockOutAt) openSession = entry;
+        });
+
+        return {
+          sessions: history,
+          summary: {
+            totalPunchCount: history.length,
+            totalDurationMs: history.reduce(function (sum, entry) {
+              return sum + (entry.durationMs || 0);
+            }, 0),
+          },
+          dailySummary: Object.keys(dailyMap).sort().map(function (key) { return dailyMap[key]; }),
+          today: {
+            date: todayKey,
+            status: state.status,
+            punchCount: todayBucket.punchCount,
+            totalDurationMs: todayBucket.totalDurationMs,
+            currentClockInAt: openSession ? openSession.clockInAt : null,
+            currentElapsedMs: state.status === 'working' ? getWorkElapsedMs(state) : 0,
+          },
+        };
+      }
 
       function defaultWorkClock() {
         return { date: null, status: 'idle', elapsedMs: 0, sessionStart: null };
@@ -2918,6 +4412,13 @@
 
       function resetWorkClockIfNewDay(state, todayKey) {
         if (state.date && state.date !== todayKey) {
+          if (state.status === 'working' && state.sessionStart) {
+            closeWorkClockSession(
+              state.date,
+              todoNowIso(),
+              Math.max(0, Date.now() - state.sessionStart)
+            );
+          }
           return defaultWorkClock();
         }
         return state;
@@ -2969,6 +4470,17 @@
         saveWorkClock(state);
         renderWorkClock(state);
 
+        if (state.status === 'working' && state.sessionStart) {
+          var history = loadWorkClockHistory();
+          var hasOpen = false;
+          history.forEach(function (entry) {
+            if (entry.date === state.date && !entry.clockOutAt) hasOpen = true;
+          });
+          if (!hasOpen) {
+            appendWorkClockSession(state.date, new Date(state.sessionStart).toISOString());
+          }
+        }
+
         var btn = document.getElementById('btn-work-clock');
         btn.addEventListener('click', function () {
           var todayKey = dateKey(getAppDate());
@@ -2979,13 +4491,17 @@
             state.status = 'working';
             state.elapsedMs = 0;
             state.sessionStart = Date.now();
+            appendWorkClockSession(todayKey, todoNowIso());
             grantStarterWorkerIfNeeded();
             syncDailyWorkers(getAppDate());
           } else if (state.status === 'off') {
             state.date = todayKey;
             state.status = 'working';
             state.sessionStart = Date.now();
+            appendWorkClockSession(todayKey, todoNowIso());
           } else if (state.status === 'working') {
+            var sessionMs = Math.max(0, Date.now() - state.sessionStart);
+            closeWorkClockSession(todayKey, todoNowIso(), sessionMs);
             state.elapsedMs = getWorkElapsedMs(state);
             state.sessionStart = null;
             state.status = 'off';
@@ -3016,6 +4532,7 @@
           initWorkClock();
           initClockPage();
           initPomoPage();
+          initTodoPage();
           initCoverMidnightWatch();
         });
 

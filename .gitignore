@@ -43,3 +43,7 @@ dist/
 build/
 .parcel-cache/
 .vercel/
+
+# ── 测试用例及临时测试目录 ──
+.test-tmp/
+scripts/test-*.mjs
